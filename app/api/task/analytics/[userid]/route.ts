@@ -7,18 +7,19 @@ connectDB();
 export async function GET(req: NextRequest, { params }: { params: { userid: string } }) {
     try {
         const tasks = await Tasks.find({ ForwardList: params?.userid });
-        const completedTasks = tasks?.map((task: any) => {
-            const notCompleted = task?.Activities?.some((activity: any) => !activity?.Completed )
-            if(notCompleted?.length <= 0){
-                return task
-            }
-        })
-        const unreadedTasks = tasks.filter((task: any) => !task?.ForwardList?.includes(params?.userid))
+        const completedTasks = tasks?.filter((task: any) => {
+            const completedActivities = task?.Activities?.filter((activity: any) => activity?.Completed);
+            return completedActivities?.length === task?.Activities?.length;
+        });
+        const unreadedTasks = tasks.filter((task: any) => !(task?.EnrolledBy?.includes(params?.userid)));
+        const createdTasks = tasks.filter((task: any) => task?.Creator == params.userid )
         const result = {
             totalTasks: tasks.length,
             completedTasks: completedTasks?.length,
-            unreadedTasks: unreadedTasks?.length
+            unreadedTasks: unreadedTasks?.length,
+            ownedTasks: createdTasks?.length
         }
+        console.log(result)
         return Response.json(result);
     } catch (error) {
         console.log(error);

@@ -8,6 +8,9 @@ import UserDailyActivity from '@/components/charts/UserDailyActivity';
 import UserMonthlyActivity from '@/components/charts/UserMonthlyActivity';
 import TodoBox from '@/components/staff/TodoBox';
 import ProjectsCompletedAndPending from '@/components/charts/ProjectsCompletedAndPending';
+import { Skeleton } from '@/components/ui/skeleton';
+import TaskAnalysis from '@/components/charts/TaskAnalysis';
+import ProjectAnalysisPi from '@/components/charts/ProjectAnalysisPi';
 
 const StaffHome = () => {
   const router = useRouter();
@@ -54,10 +57,13 @@ const StaffHome = () => {
           </div>
         </div>
       </div>
-      <div className='w-full mt-3 bg-slate-950/50 p-3 rounded-lg'>
+      <div className='w-full mt-3 bg-slate-950/50 p-3 pb-5 rounded-lg'>
         <h1 className='text-sm font-medium gap-1 items-center flex text-cyan-500 mb-2'><AreaChart size={18} /> Analytics</h1>
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 w-full">
-          <ProjectsCompletedAndPending currentUser={userData} />
+          {userData && <ProjectsCompletedAndPending currentUser={userData} />}
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 w-full mt-2">
+          {userData && <TaskAnalysis currentUser={userData} /> }
+          {userData && <ProjectAnalysisPi currentUser={userData} /> }
+          {userLoading && <Skeleton className='w-full h-[300px]' />}
         </div>
       </div>
     </div>

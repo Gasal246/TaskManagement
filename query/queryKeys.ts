@@ -47,6 +47,7 @@ export enum QUERY_KEYS {
     // Analytics
     GET_PROJECTS_ANALYTICS = "getProjectsAnalytics",
     GET_TASKS_ANALYTICS = "getAllTaskAnalytics",
+    GET_PROJECT_COMPLETED_PENDING_CHART = "getProjectCompletedAndPendingChart",
 
     // Client keys
     GET_ALL_CLIENTS = "getAllClientsByUserId",

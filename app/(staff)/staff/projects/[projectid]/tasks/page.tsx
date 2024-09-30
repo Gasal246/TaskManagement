@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { Progress } from '@/components/ui/progress'
 import { Flag, LayoutList, Trash2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 const ProjectTasks = ({ params }: { params: { projectid: string } }) => {
     const router = useRouter();
@@ -31,15 +32,16 @@ const ProjectTasks = ({ params }: { params: { projectid: string } }) => {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <div className="bg-slate-950/50 rounded-lg p-3 my-3">
+            <div className="bg-slate-950/50 rounded-lg p-3 my-3 items-center justify-between flex">
                 <h1 className=''>Project Tasks</h1>
+                <Button className='rounded-full' onClick={() => router.push(`/staff/tasks/add-task?projectid=${params?.projectid}`)}>Add Task</Button>
             </div>
             <div className="bg-slate-950/50 rounded-lg p-3">
                 <Input type='search' placeholder='Search..' className='w-full lg:w-1/2 my-1' />
                 <div className="flex flex-wrap">
                     <div className="w-full lg:w-4/12 p-1">
                         <Tooltip title="Click To Open This Task">
-                            <motion.div onClick={() => router.push(`/staff/tasks/taskid`)} whileTap={{ scale: 0.98 }} className="p-2 rounded-lg bg-cyan-950 border border-neutral-800 hover:border-neutral-600 select-none cursor-pointer">
+                            <motion.div onClick={() => router.push(`/staff/tasks/taskid?projectid=${params.projectid}`)} whileTap={{ scale: 0.98 }} className="p-2 rounded-lg bg-cyan-950 border border-neutral-800 hover:border-neutral-600 select-none cursor-pointer">
                                 <div className="flex justify-between items-center px-1 mb-1">
                                     <h1 className='font-semibold'>Task Name</h1>
                                     <Popconfirm title="Delete this Task?" description="Are you sure wanna delete this task." onConfirm={() => handleDeleteTask('123')}><motion.div whileHover={{ rotate: -35 }}><Trash2 color='red' size={18} /></motion.div></Popconfirm>

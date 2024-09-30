@@ -3,35 +3,30 @@ import { TrendingUp } from "lucide-react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card"
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, } from "@/components/ui/chart"
+import { useGetProjectCompletedPendingAnalytics } from "@/query/client/analyticsQueries"
 export const description = "A stacked area chart"
-const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-]
+
 const chartConfig = {
-    desktop: {
-        label: "Desktop",
+    completed: {
+        label: "Completed",
         color: "hsl(var(--chart-1))",
     },
-    mobile: {
-        label: "Mobile",
+    pending: {
+        label: "Pending",
         color: "hsl(var(--chart-2))",
     },
 } satisfies ChartConfig
 
 const ProjectsCompletedAndPending = ({ currentUser }: { currentUser: any }) => {
+    const { data: chartData, isLoading: loadingData } = useGetProjectCompletedPendingAnalytics(currentUser?._id)
     return (
-        <Card className="border-0 rounded-lg">
+        <Card className="border-0 rounded-lg bg-slate-950/70">
             <CardHeader className="pb-0">
-                <CardTitle>Total Project Analysis</CardTitle>
+                <CardTitle>Anual Project Analysis <span className="text-cyan-500">{new Date().getFullYear()}</span></CardTitle>
                 <CardDescription>showing yearly analysis of all user engaged projects.</CardDescription>
             </CardHeader>
             <CardContent className="p-3 pb-10">
-                <ChartContainer config={chartConfig}>
+                <ChartContainer config={chartConfig} className="max-h-[400px] w-full">
                     <AreaChart
                         accessibilityLayer
                         data={chartData}
@@ -53,42 +48,42 @@ const ProjectsCompletedAndPending = ({ currentUser }: { currentUser: any }) => {
                             <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
                                 <stop
                                     offset="5%"
-                                    stopColor="var(--color-desktop)"
+                                    stopColor="var(--color-completed)"
                                     stopOpacity={0.8}
                                 />
                                 <stop
                                     offset="95%"
-                                    stopColor="var(--color-desktop)"
+                                    stopColor="var(--color-completed)"
                                     stopOpacity={0.1}
                                 />
                             </linearGradient>
                             <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
                                 <stop
                                     offset="5%"
-                                    stopColor="var(--color-mobile)"
+                                    stopColor="var(--color-pending)"
                                     stopOpacity={0.8}
                                 />
                                 <stop
                                     offset="95%"
-                                    stopColor="var(--color-mobile)"
+                                    stopColor="var(--color-pending)"
                                     stopOpacity={0.1}
                                 />
                             </linearGradient>
                         </defs>
                         <Area
-                            dataKey="mobile"
+                            dataKey="pending"
                             type="natural"
                             fill="url(#fillMobile)"
                             fillOpacity={0.4}
-                            stroke="var(--color-mobile)"
+                            stroke="var(--color-pending)"
                             stackId="a"
                         />
                         <Area
-                            dataKey="desktop"
+                            dataKey="completed"
                             type="natural"
                             fill="url(#fillDesktop)"
                             fillOpacity={0.4}
-                            stroke="var(--color-desktop)"
+                            stroke="var(--color-completed)"
                             stackId="a"
                         />
                     </AreaChart>
@@ -98,10 +93,10 @@ const ProjectsCompletedAndPending = ({ currentUser }: { currentUser: any }) => {
                 <div className="flex w-full items-start gap-2 text-sm">
                     <div className="grid gap-2">
                         <div className="flex items-center gap-2 font-medium leading-none">
-                            Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+                            Digital report for your past year project activity <TrendingUp className="h-4 w-4" />
                         </div>
                         <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                            January - June 2024
+                            January - December {new Date().getFullYear()}
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, } from "@/components/ui/sheet"
 import { Button } from '../ui/button'
 import { Flag } from 'lucide-react'
@@ -12,10 +12,17 @@ import { Textarea } from '../ui/textarea'
 
 const formSchema = z.object({
     name: z.string().min(2),
-    description: z.string().min(2),
+    description: z.string().min(2)
 })
 
-const AddActivitySheet = ({ projectid, trigger }: { projectid?: string, trigger: React.ReactNode }) => {
+interface Activity {
+    Title: string;
+    Description: string;
+    Priority: string;
+    Completed: boolean;
+}
+
+const AddActivitySheet = ({ taskid, trigger, activities, setActivities }: { taskid?: string, trigger: React.ReactNode, activities?: any[], setActivities?: Dispatch<SetStateAction<any[]>> }) => {
     const [priority, setPriority] = useState('low');
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -25,12 +32,20 @@ const AddActivitySheet = ({ projectid, trigger }: { projectid?: string, trigger:
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    function handleAddActivity(values: z.infer<typeof formSchema>) {
+        if(!taskid){
+            setActivities!((prev: Activity[]) => [...prev, {
+                Title: values.name,
+                Description: values.description,
+                Priority: priority, 
+                Completed: false,
+            }])
+            form.reset();
+        }
     }
     return (
         <Sheet>
-            <SheetTrigger>{trigger}</SheetTrigger>
+            <SheetTrigger asChild>{trigger}</SheetTrigger>
             <SheetContent className="w-[400px] lg:min-w-[660px]">
                 <SheetHeader>
                     <SheetTitle>Add Activity</SheetTitle>
@@ -38,7 +53,7 @@ const AddActivitySheet = ({ projectid, trigger }: { projectid?: string, trigger:
                 </SheetHeader>
                 <div className="h-full overflow-y-scroll pb-10 my-3">
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <form className="space-y-4">
                             <FormField
                                 control={form.control}
                                 name="name"
@@ -56,7 +71,7 @@ const AddActivitySheet = ({ projectid, trigger }: { projectid?: string, trigger:
                                 <label className='text-sm font-medium'>Select Priority</label><br />
                                 <div className="flex items-center gap-2">
                                     <h1 className={`cursor-pointer text-sm font-medium hover:bg-cyan-950/50 border ${priority == 'high' && 'bg-cyan-950'} border-slate-500 p-1 px-3 flex gap-1 items-center rounded-lg`} onClick={() => setPriority('high')}>High <Flag size={18} fill='red' /></h1>
-                                    <h1 className={`cursor-pointer text-sm font-medium hover:bg-cyan-950/50 border ${priority == 'average' && 'bg-cyan-950'} border-slate-500 p-1 px-3 flex gap-1 items-center rounded-lg`} onClick={() => setPriority('average')}>Average <Flag size={18} fill='gold' /></h1>
+                                    <h1 className={`cursor-pointer text-sm font-medium hover:bg-cyan-950/50 border ${priority == 'medium' && 'bg-cyan-950'} border-slate-500 p-1 px-3 flex gap-1 items-center rounded-lg`} onClick={() => setPriority('medium')}>Average <Flag size={18} fill='gold' /></h1>
                                     <h1 className={`cursor-pointer text-sm font-medium hover:bg-cyan-950/50 border ${priority == 'low' && 'bg-cyan-950'} border-slate-500 p-1 px-3 flex gap-1 items-center rounded-lg`} onClick={() => setPriority('low')}>Low <Flag size={18} fill='silver' /></h1>
                                 </div>
                             </div>
@@ -73,7 +88,7 @@ const AddActivitySheet = ({ projectid, trigger }: { projectid?: string, trigger:
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit">Submit</Button>
+                            <Button type="button" onClick={form.handleSubmit(handleAddActivity)}>Add Activity</Button>
                         </form>
                     </Form>
                 </div>

@@ -1,20 +1,27 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useRouter } from 'next/navigation'
 import { useFindUserById } from '@/query/client/userQueries'
 import { useSession } from 'next-auth/react'
-import { CalendarCheck, CalendarPlus} from 'lucide-react'
+import { CalendarCheck, CalendarPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import TaskTab from '@/components/staff/TaskTab'
 import { useGetAllTaskAnalytics } from '@/query/client/analyticsQueries'
+import { Badge } from 'antd'
 
 const TasksPage = () => {
   const { data: session }: any = useSession();
   const router = useRouter();
   const { data: currentUser, isLoading: loadingUser } = useFindUserById(session?.user?.id);
-  const { data: newTaskAnalytics, isLoading: loadingNewAnalytics } = useGetAllTaskAnalytics(session?.user?.id)
+  const { data: newTaskAnalytics, isLoading: loadingNewAnalytics } = useGetAllTaskAnalytics(session?.user?.id);
+
+  useEffect(() => {
+    if (newTaskAnalytics) {
+      console.log(newTaskAnalytics)
+    }
+  }, [newTaskAnalytics])
 
   return (
     <div className='p-4'>
@@ -28,7 +35,7 @@ const TasksPage = () => {
           {/* -------------------------------  ADD PROJECT FILTRATION HERE ------------------------------- */}
         </div>
         <TabsList className='flex-wrap md:flex-none my-2 h-full w-full grid lg:grid-cols-4 grid-cols-2'>
-          <TabsTrigger value="new" className='flex gap-2'>New Tasks</TabsTrigger>
+          <div className='px-2'><Badge size='small' count={newTaskAnalytics?.unreadedTasks} className='w-full text-slate-300'><TabsTrigger value="new" className='flex items-center gap-3 w-full'>New Tasks</TabsTrigger></Badge></div>
           <TabsTrigger value="accepted">Accepted</TabsTrigger>
           <TabsTrigger value="created">Created</TabsTrigger>
           <TabsTrigger value="completed">Completed</TabsTrigger>

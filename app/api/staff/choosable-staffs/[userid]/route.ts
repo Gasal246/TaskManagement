@@ -1,5 +1,7 @@
 import connectDB from "@/lib/mongo";
+import Areas from "@/models/areaCollection";
 import Departments from "@/models/departmentsCollection";
+import Regions from "@/models/regionCollection";
 import Users from "@/models/userCollection";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,11 +11,10 @@ export async function GET(req: NextRequest, { params }: { params: { userid: stri
     try {
         const user = await Users.findById(params?.userid);
         let stafflist: any;
-        if (user?.Role === 'staff' || user?.Role === 'area-head') {
-            stafflist = await Departments.findById(user?.Department, { Staffs: 1 })
+        if (user?.Role === 'area-head') {
+            stafflist = await Areas.findById(user?.Area, { Staffs: 1 })
                 .populate({
-                    path: 'Staffs',
-                    match: { Role: 'staff', Region: user?.Region, Area: user?.Area },
+                    path: "Staffs",
                     select: { Name: 1, Email: 1, AvatarUrl: 1, Role: 1, Region: 1, Area: 1, Status: 1 },
                     populate: [
                         {
@@ -26,17 +27,10 @@ export async function GET(req: NextRequest, { params }: { params: { userid: stri
                         }
                     ]
                 }).lean();
-            if (stafflist && stafflist?.Staffs) {
-                stafflist.Staffs = stafflist?.Staffs?.map((staff: any) => ({
-                    ...staff,
-                    departmentId: stafflist._id
-                }));
-            }
-        } else if (user?.Role === 'region-head' || user?.Role === 'reg-staff') {
-            stafflist = await Departments.findById(user?.Department, { Staffs: 1 })
+        } else if (user?.Role === 'region-head') {
+            stafflist = await Regions.findById(user?.Region, { Staffs: 1 })
                 .populate({
-                    path: 'Staffs',
-                    match: { Role: 'reg-staff', Region: user?.Region },
+                    path: "Staffs",
                     select: { Name: 1, Email: 1, AvatarUrl: 1, Role: 1, Region: 1, Area: 1, Status: 1 },
                     populate: [
                         {
@@ -49,14 +43,8 @@ export async function GET(req: NextRequest, { params }: { params: { userid: stri
                         }
                     ]
                 }).lean();
-            if (stafflist && stafflist?.Staffs) {
-                stafflist.Staffs = stafflist?.Staffs?.map((staff: any) => ({
-                    ...staff,
-                    departmentId: stafflist._id
-                }));
-            }
-        } else if (user?.Role === 'dep-head' || user?.Role === 'dep-staff') {
-            stafflist = await Departments.find({ _id: user?.Department }, { Staffs: 1 })
+        } else if (user?.Role === 'dep-head') {
+            stafflist = await Departments.findById(user?.Department, { Staffs: 1 })
                 .populate({
                     path: 'Staffs',
                     match: { Role: 'dep-staff' },

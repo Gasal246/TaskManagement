@@ -38,7 +38,7 @@ const TasksSchema: Schema = new Schema({
   AcceptedBy: { type: Schema.Types.ObjectId, ref: "Users" },
   AcceptedOn: { type: Date },
   ForwardList: [{ type: Schema.Types.ObjectId, ref: "Users" }],
-  ForwardType: { type: String, enum: ['department', 'individual']},
+  ForwardType: { type: String, enum: ['public', 'individual']},
   AssignedDepartment: { 
     DepId: { type: Schema.Types.ObjectId, ref: "Departments" },
     Region: { type: Schema.Types.ObjectId, ref: "Regions" },

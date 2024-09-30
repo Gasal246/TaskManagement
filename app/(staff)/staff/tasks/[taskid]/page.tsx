@@ -7,15 +7,16 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, } from "@/components/ui/breadcrumb"
 import { Textarea } from "@/components/ui/textarea"
 import { Input, Popconfirm, Popover, Tooltip } from 'antd'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import TaskAnalyticsSheet from '@/components/task/TaskAnalyticsSheet'
 import AddActivitySheet from '@/components/task/AddActivitySheet'
 import EditTaskPriorityDurationSheet from '@/components/task/EditTaskPriorityDurationSheet'
 
 const TaskIdPage = ({ params }: { params: { taskid: string } }) => {
   const router = useRouter()
+  const searchParams = useSearchParams();
   const [isCompleted, setIsCompleted] = useState();
-  const [projectid, setProjectid] = useState(true);
+  const projectid = searchParams.get('projectid');
 
   const handleChecking = async (activityId: string, isCompleted: boolean) => {
 
@@ -64,7 +65,7 @@ const TaskIdPage = ({ params }: { params: { taskid: string } }) => {
         <Popconfirm title="Delete Task!!" description="Are you sure to delet this task ?"><button className='bg-cyan-950 rounded-lg text-red-400 hover:text-white hover:border-slate-300 border-red-700 text-xs px-3 p-1 border'>Delete task</button></Popconfirm>
         <EditTaskPriorityDurationSheet trigger={
           <button className='bg-cyan-950 rounded-lg text-orange-400 hover:text-white hover:border-slate-300 border-red-700 text-xs px-3 p-1 border'>Update task</button>
-        } taskData={{}}  />
+        } taskData={{}} />
       </div>
       <div className="bg-slate-950/50 p-3 rounded-lg mb-3">
         <h1 className='text-center mb-1 text-sm'>ToDo</h1>
