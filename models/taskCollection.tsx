@@ -27,6 +27,7 @@ export interface ITasks extends Document {
     Region: ObjectId | null;
     Area: ObjectId | null;
   };
+  CompleteComment: String | null;
   createdAt: Date | null;
   updatedAt: Date | null;
 }
@@ -54,9 +55,10 @@ const TasksSchema: Schema = new Schema({
   Activities: [{
     Title: { type: String },
     Description: { type: String },
-    Proirity: { type: String, enum: ['high', 'medium', 'low']},
+    Priority: { type: String, enum: ['high', 'medium', 'low']},
     Completed: { type: Boolean, default: false }
-  }]
+  }],
+  CompleteComment: { type: String }
 }, { timestamps: true });
 
 const Tasks = mongoose.models?.Tasks || mongoose.model<ITasks>('Tasks', TasksSchema);

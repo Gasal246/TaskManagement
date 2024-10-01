@@ -41,13 +41,16 @@ export async function POST(req: NextRequest){
         const { taskform } = Object.fromEntries(formData) as { taskform: string };
         const body = await JSON.parse(taskform) as Body;
 
-        console.log(body)
-
-        const user = await Users.findById(body?.Creator, { Role: 1, Area: 1, Region: 1, Department: 1 })
+        const user = await Users.findById(body?.Creator, { Role: 1, Area: 1, Region: 1, Department: 1, Addedby: 1 })
         .populate({
             path: "Area",
             select: { AreaHead: 1 }
         });
+
+        const existing = await Tasks.findOne({ AdminId: user?.Addedby, ForwardList: body?.Creator, TaskName: body?.taskName });
+        if(existing){
+            return Response.json({ existing: true })
+        }
 
         let forwardlist: string[] = [];
         if(body?.ForwardType == 'public'){

@@ -20,6 +20,7 @@ import ProjectFlow from '@/components/project/ProjectFlow'
 import ProjectComments from '@/components/project/ProjectComments'
 import ChangeDeadlineDialog from '@/components/project/ChangeDeadlineDialog'
 import { useInView } from 'react-intersection-observer'
+import { useGetProjectTasks } from '@/query/client/taskQueries'
 
 const ProjectIdPage = ({ params }: { params: { projectid: string } }) => {
     const { data: session }: any = useSession();

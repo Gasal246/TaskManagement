@@ -9,6 +9,9 @@ import { z } from "zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from '../ui/textarea'
+import { useAddNewTaskActivity } from '@/query/client/taskQueries'
+import { toast } from 'sonner'
+import LoaderSpin from '../shared/LoaderSpin'
 
 const formSchema = z.object({
     name: z.string().min(2),
@@ -24,6 +27,7 @@ interface Activity {
 
 const AddActivitySheet = ({ taskid, trigger, activities, setActivities }: { taskid?: string, trigger: React.ReactNode, activities?: any[], setActivities?: Dispatch<SetStateAction<any[]>> }) => {
     const [priority, setPriority] = useState('low');
+    const { mutateAsync: addTaskActivity, isPending: addingActivity } = useAddNewTaskActivity()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -32,7 +36,7 @@ const AddActivitySheet = ({ taskid, trigger, activities, setActivities }: { task
         },
     })
 
-    function handleAddActivity(values: z.infer<typeof formSchema>) {
+    async function handleAddActivity(values: z.infer<typeof formSchema>) {
         if(!taskid){
             setActivities!((prev: Activity[]) => [...prev, {
                 Title: values.name,
@@ -41,8 +45,26 @@ const AddActivitySheet = ({ taskid, trigger, activities, setActivities }: { task
                 Completed: false,
             }])
             form.reset();
+        }else{
+            const formData = new FormData();
+            formData.append('form', JSON.stringify({
+                Title: values.name,
+                Description: values.description,
+                Priority: priority,
+                Completed: false,
+                taskid: taskid
+            }))
+            const response = await addTaskActivity(formData);
+            if(response?._id){
+                return toast.success("New Activity added")
+            }else{
+                return toast.error("Something went wrong", {
+                    description: "Activity Not Added."
+                })
+            }
         }
     }
+
     return (
         <Sheet>
             <SheetTrigger asChild>{trigger}</SheetTrigger>
@@ -88,7 +110,7 @@ const AddActivitySheet = ({ taskid, trigger, activities, setActivities }: { task
                                     </FormItem>
                                 )}
                             />
-                            <Button type="button" onClick={form.handleSubmit(handleAddActivity)}>Add Activity</Button>
+                            <Button type="button" onClick={form.handleSubmit(handleAddActivity)}>{addingActivity ? <LoaderSpin size={22} /> : 'Add Activity'}</Button>
                         </form>
                     </Form>
                 </div>

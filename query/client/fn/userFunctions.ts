@@ -49,7 +49,7 @@ export async function findUserById(id: string){
 
 export async function getTaskById(taskid: string){
     try {
-        const res = await axios.get(`/api/task/get-id/${taskid}`);
+        const res = await axios.get(`/api/task/getid/${taskid}`);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -68,15 +68,6 @@ export async function getAllTasks(userid: string, filter: TaskTypes){
 export async function addNewTask(formData: FormData){
     try {
         const res = await axios.post('/api/task/add-task', formData );
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export async function editTask(formData: FormData){
-    try {
-        const res = await axios.post('/api/task/edit-task', formData );
         return res.data;
     } catch (error) {
         console.log(error);

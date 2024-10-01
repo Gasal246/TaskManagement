@@ -12,6 +12,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { cn } from '@/lib/utils'
 import { Calendar } from '../ui/calendar'
 import { format } from "date-fns"
+import { useEditTask } from '@/query/client/taskQueries'
+import { toast } from 'sonner'
+import LoaderSpin from '../shared/LoaderSpin'
 
 const formSchema = z.object({
     description: z.string().min(2),
@@ -20,6 +23,7 @@ const formSchema = z.object({
 
 const EditTaskPriorityDurationSheet = ({ taskData, trigger }: { taskData: any, trigger: React.ReactNode }) => {
     const [priority, setPriority] = useState(taskData?.Priority);
+    const { mutateAsync: taskupdate, isPending: updatingTask } = useEditTask()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -28,8 +32,19 @@ const EditTaskPriorityDurationSheet = ({ taskData, trigger }: { taskData: any, t
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        const formData = new FormData();
+        formData.append('form', JSON.stringify({
+            Description: values.description,
+            Deadline: values.duration,
+            Priority: priority
+        }))
+        const response = await taskupdate({ formData: formData });
+        if(response?._Id){
+            toast.success("Task Updated Successfully")
+        }else{
+            toast.error("Something went wrong", { description: `Error: ${response}`})
+        }
     }
     return (
         <Sheet>
@@ -46,7 +61,7 @@ const EditTaskPriorityDurationSheet = ({ taskData, trigger }: { taskData: any, t
                                 <label className='text-sm font-medium'>Change Priority</label><br />
                                 <div className="flex items-center gap-2">
                                     <h1 className={`cursor-pointer text-sm font-medium hover:bg-cyan-950/50 border ${priority == 'high' && 'bg-cyan-950'} border-slate-500 p-1 px-3 flex gap-1 items-center rounded-lg`} onClick={() => setPriority('high')}>High <Flag size={18} fill='red' /></h1>
-                                    <h1 className={`cursor-pointer text-sm font-medium hover:bg-cyan-950/50 border ${priority == 'average' && 'bg-cyan-950'} border-slate-500 p-1 px-3 flex gap-1 items-center rounded-lg`} onClick={() => setPriority('average')}>Average <Flag size={18} fill='gold' /></h1>
+                                    <h1 className={`cursor-pointer text-sm font-medium hover:bg-cyan-950/50 border ${priority == 'medium' && 'bg-cyan-950'} border-slate-500 p-1 px-3 flex gap-1 items-center rounded-lg`} onClick={() => setPriority('average')}>Average <Flag size={18} fill='gold' /></h1>
                                     <h1 className={`cursor-pointer text-sm font-medium hover:bg-cyan-950/50 border ${priority == 'low' && 'bg-cyan-950'} border-slate-500 p-1 px-3 flex gap-1 items-center rounded-lg`} onClick={() => setPriority('low')}>Low <Flag size={18} fill='silver' /></h1>
                                 </div>
                             </div>
@@ -90,7 +105,7 @@ const EditTaskPriorityDurationSheet = ({ taskData, trigger }: { taskData: any, t
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit">{updatingTask ? <LoaderSpin size={22} /> : 'Update'}</Button>
                         </form>
                     </Form>
                 </div>

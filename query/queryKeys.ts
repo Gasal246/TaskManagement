@@ -52,4 +52,7 @@ export enum QUERY_KEYS {
     // Client keys
     GET_ALL_CLIENTS = "getAllClientsByUserId",
     GET_CLIENT_BY_ID = "getClientByUserId",
+
+    // Task keys
+    GET_PROJECT_TASKS = "getProjectTasks",
 }

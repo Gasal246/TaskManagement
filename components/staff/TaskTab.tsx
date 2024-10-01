@@ -62,7 +62,7 @@ const TaskTab = ({ currentUser, tasktype, projectIds }: { currentUser: any, task
                                         </div>
                                     </div>
                                     <div className='flex gap-1 items-center mt-2'>
-                                        <Progress value={task?.Progress} /> <span className='text-xs'>{task?.Progress}</span>
+                                        <Progress value={task?.Progress} /> <span className='text-xs'>{(task?.Progress).toFixed(2)}%</span>
                                     </div>
                                 </motion.div>
                             </Badge>

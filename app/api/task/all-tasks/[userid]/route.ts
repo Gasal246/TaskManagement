@@ -32,8 +32,8 @@ export async function GET(req: NextRequest, { params }:{ params: { userid: strin
                 select: { Title: 1 }
             });
         const tasklist = tasks.map((task: any) => {
-            const completed = task?.Activities?.some((activity: any) => activity?.Completed )
-            return { ...task?._doc, Progress: ((completed / task?.Activities?.length) * 100) }
+            const completed = task?.Activities?.filter((activity: any) => activity?.Completed )
+            return { ...task?._doc, Progress: ((completed.length / task?.Activities?.length) * 100) }
         })
         return Response.json(tasklist);
     } catch (error) {
