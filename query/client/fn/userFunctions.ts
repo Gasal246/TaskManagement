@@ -27,9 +27,9 @@ export async function verifyOTP(email: string, otp: string){
     }
 }
 
-export async function setupNewPassword(email: string, password: string){
+export async function setupNewPassword(email: string, password: string, pin: string){
     try {
-        const res = await axios.post('/api/users/setup-pass', { email, password });
+        const res = await axios.post('/api/users/setup-pass', { email, password, pin });
         return res.data;
     } catch (error) {
         console.log(error)
@@ -42,6 +42,15 @@ export async function findUserById(id: string){
         return res.data;
     } catch (error) {
         console.log(error)
+    }
+}
+
+export async function sendMagicLink(email: string){
+    try {
+        const res = await axios.get(`/api/auth/send-magic-link/${email}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
     }
 }
 

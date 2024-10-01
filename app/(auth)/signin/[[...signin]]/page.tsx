@@ -141,7 +141,7 @@ const LoginPage = () => {
                     }
                     <div className="flex justify-between items-center">
                         <Link href={`/forgetpassword`} className='text-blue-600 text-sm'>
-                            forgot credentials ?
+                            forgot password ?
                         </Link>
                         {form.getValues('email').length > 0 && form.getValues('password').length > 0 &&
                             <Button type="submit">{loading ? <Image src={`/icons/loadingspin.svg`} width={30} height={30} alt='loader' /> : 'Login now'}</Button>

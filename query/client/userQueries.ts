@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { QUERY_KEYS } from "../queryKeys";
-import { addNewTask, deleteTask, findByMail, findUserById, getTaskComments, getTaskById, sendEmailVerificationOtp, setupNewPassword, verifyOTP, addTaskComment, removeTaskComment, getChoosableStaffs, getAllNotifications, notificationInview, resetPassword, getUserRole, getAllTasks } from "./fn/userFunctions";
+import { addNewTask, deleteTask, findByMail, findUserById, getTaskComments, getTaskById, sendEmailVerificationOtp, setupNewPassword, verifyOTP, addTaskComment, removeTaskComment, getChoosableStaffs, getAllNotifications, notificationInview, resetPassword, getUserRole, getAllTasks, sendMagicLink } from "./fn/userFunctions";
 
 export const useFindByMailId = () => {
     const queryClient = useQueryClient();
@@ -23,7 +23,7 @@ export const useVerifyOtp = () => {
 
 export const useSetupUserPassword = () => {
     return useMutation({
-        mutationFn: ({ email, password }: { email: string, password: string }) => setupNewPassword(email, password),
+        mutationFn: ({ email, password, pin }: { email: string, password: string, pin: string }) => setupNewPassword(email, password, pin),
     })
 }
 
@@ -32,6 +32,12 @@ export const useFindUserById = (userid: string) => {
         queryKey: [QUERY_KEYS.GET_USER_BY_ID, userid],
         queryFn: async () => await findUserById(userid),
         enabled: !!userid
+    })
+}
+
+export const useSendPasswordMagicLink = () => {
+    return useMutation({
+        mutationFn: ({ email }: { email: string }) => sendMagicLink(email),
     })
 }
 

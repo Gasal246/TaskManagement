@@ -37,7 +37,7 @@ const ResetPassword = ({ params }: { params: { email: string, pin: string } }) =
       const res = await verifyOtp({ email, otp: pin });
       const user = await findByEmail(email)
       if (!res || !user || !user?.InitialEntry ) {
-        toast.error("This will be counted as a malpractise.")
+        toast.error("Seems Like You Are into Something Huh??.")
         router.replace('/')
       }
     }
@@ -56,7 +56,7 @@ const ResetPassword = ({ params }: { params: { email: string, pin: string } }) =
     if(values.password !== values.cpassword){
       return toast.error("passwords are not matching!!")
     }
-    const response = await setupNewPassword({ email, password: values.password })
+    const response = await setupNewPassword({ email, password: values.password, pin: pin })
     if(!response){
       return toast.error("password setup failed", {
         description: "some unexpected error occured, please try again"

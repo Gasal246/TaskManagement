@@ -13,7 +13,11 @@ export async function POST(req:NextRequest) {
             return new NextResponse("Unauthorised Access to req", { status: 401 });
         }
         const { taskid } = await req.json();
-        const updatedTask = await Tasks.findByIdAndUpdate(taskid, { $pull: { EnrolledBy: session?.user?.id }}, { new: true });
+        const existing = await Tasks.findById(taskid, { EnrolledBy: 1 });
+        if(existing?.EnrolledBy?.includes(session?.user?.id)){
+            return Response.json({ existing: true })
+        }
+        const updatedTask = await Tasks.findByIdAndUpdate(taskid, { $push: { EnrolledBy: session?.user?.id }}, { new: true });
         return Response.json(updatedTask);
     } catch (error) {
         console.log(error);

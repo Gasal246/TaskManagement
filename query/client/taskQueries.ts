@@ -95,7 +95,7 @@ export const useChangeTaskTitle = () => {
 export const useEditTask = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ formData }: { formData: FormData }) => editTask(formData),
+        mutationFn: async ({ formData }: { formData: FormData }) => await editTask(formData),
         onSuccess: (data: any) => {
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.GET_TASK_BY_ID, data?._id]
@@ -113,13 +113,16 @@ export const useEditTask = () => {
 export const useTaskOnView = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ taskid }: { taskid: string }) => inviewTask(taskid),
+        mutationFn: async ({ taskid }: { taskid: string }) => await inviewTask(taskid),
         onSuccess: (data: any) => {
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.GET_TASK_BY_ID, data?._id]
             })
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.GET_ALL_TASKS]
+            })
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_PROJECT_TASKS]
             })
         }
     })
