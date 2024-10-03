@@ -36,6 +36,7 @@ export enum QUERY_KEYS {
     GET_ALL_NOTIFICATIONS = "getNotificationsByUserId",
     GET_USER_ROLE="getUserRoleById",
     GET_DEPARTMENTS_BY_HEADID = "getDepartmentsByHeadId",
+    GET_HEAD_INFO = "getHeadByUserId",
 
     // project keys
     GET_ALL_PROJECTS = "getAllProjects",
@@ -48,6 +49,8 @@ export enum QUERY_KEYS {
     GET_PROJECTS_ANALYTICS = "getProjectsAnalytics",
     GET_TASKS_ANALYTICS = "getAllTaskAnalytics",
     GET_PROJECT_COMPLETED_PENDING_CHART = "getProjectCompletedAndPendingChart",
+    GET_TASKS_ANALYTICS_PI_CHART = "getTaskAnalyticsPiChart",
+    GET_PROJECT_STATISTICS = "getProjectStatisticsByUserid",
 
     // Client keys
     GET_ALL_CLIENTS = "getAllClientsByUserId",

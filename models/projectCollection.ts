@@ -50,7 +50,7 @@ const ProjectsSchema: Schema = new Schema({
     IsApproved: { type: Boolean },
     OpenedBy: [{ type: Schema.Types.ObjectId, ref: "Users" }],
     AccessTo: [{ type: Schema.Types.ObjectId, ref: "Users" }],
-    IsCompleted: { type: Boolean },
+    IsCompleted: { type: Boolean, default: false },
     ClientId: { type: Schema.Types.ObjectId, ref: "Users" },
 }, { timestamps: true });
 

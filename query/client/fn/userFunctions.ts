@@ -45,6 +45,15 @@ export async function findUserById(id: string){
     }
 }
 
+export async function findHeadByUserid( userid: string ) {
+    try {
+        const res = await axios.get(`/api/users/get-head/${userid}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async function sendMagicLink(email: string){
     try {
         const res = await axios.get(`/api/auth/send-magic-link/${email}`);

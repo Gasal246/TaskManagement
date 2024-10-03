@@ -1,12 +1,7 @@
 "use client"
 import ProfilPageSkeleton from '@/components/skeletons/ProfilPageSkeleton'
-import { Button } from '@/components/ui/button'
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { useFindUserById } from '@/query/client/userQueries'
+import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
+import { useFindHeadInfo, useFindUserById } from '@/query/client/userQueries'
 import { Avatar } from 'antd'
 import { EllipsisVertical } from 'lucide-react'
 import { useSession } from 'next-auth/react'
@@ -15,10 +10,13 @@ import { motion } from 'framer-motion'
 import EditUserInfoDialog from '@/components/staff/EditUserInfoDialog'
 import ChangeDpDialog from '@/components/admin/ChangeDpDialog'
 import ResetPasswordDialog from '@/components/shared/ResetPasswordDialog'
+import { useRouter } from 'next/navigation'
 
 const ProfilPage = ({ params }: { params: { id: string } }) => {
     const { data: session }: any = useSession();
-    const { data: userData, isLoading: loadingUserData } = useFindUserById(session?.user?.id);
+    const { data: userData, isLoading: loadingUserData } = useFindUserById(params?.id);
+    const { data: headInfo, isLoading: loadingHeadInfo } = useFindHeadInfo(session?.user?.id);
+    const router = useRouter();
     return (
         <div className='w-full h-full'>
             {loadingUserData ?
@@ -74,6 +72,19 @@ const ProfilPage = ({ params }: { params: { id: string } }) => {
                                 <div className="bg-slate-950/50 p-2 rounded-lg border border-slate-800">
                                     <h1 className='text-xs font-semibold text-slate-400'>User Area:</h1>
                                     <h1 className='text-sm font-medium text-slate-300 capitalize'>{userData?.Area?.Areaname}</h1>
+                                </div>
+                            </div>
+                            <div className="w-full lg:w-3/12 p-1">
+                                <div className="bg-slate-950/50 p-2 rounded-lg border border-slate-800">
+                                    <h1 className='text-xs font-semibold text-slate-400'>Head Information:</h1>
+                                    <h1 className='text-center text-xs mb-1 text-orange-600 capitalize'>-- {headInfo?.Role} --</h1>
+                                    <div className="flex items-center gap-1 select-none cursor-pointer" onClick={() => router.push(`/staff/profile/${headInfo?._id}`)}>
+                                        <Avatar src={headInfo?.AvatarUrl || "/avatar.png"} />
+                                        <div>
+                                            <h1 className='text-xs text-slate-300'>{headInfo?.Name}</h1>
+                                            <h1 className='text-xs text-slate-400'>{headInfo?.Email}</h1>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

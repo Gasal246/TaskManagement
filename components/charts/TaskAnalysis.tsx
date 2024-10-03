@@ -2,20 +2,10 @@
 import * as React from "react"
 import { TrendingUp } from "lucide-react"
 import { Label, Pie, PieChart } from "recharts"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
 } from "@/components/ui/card"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, } from "@/components/ui/chart"
+import { useGetTaskAnalyticsPi } from "@/query/client/analyticsQueries"
 export const description = "A donut chart with text"
 const chartData = [
   { taskType: "ongoing", count: 275, fill: "var(--color-ongoing)" },
@@ -43,6 +33,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 const TaskAnalysis = ({ currentUser }: { currentUser: any }) => {
+      const { data: chartData, isLoading: loading} = useGetTaskAnalyticsPi(currentUser?._id)
       return (
         <Card className="flex flex-col border-0 rounded-lg bg-slate-950/70">
           <CardHeader className="items-start pb-0">
@@ -59,13 +50,7 @@ const TaskAnalysis = ({ currentUser }: { currentUser: any }) => {
                   cursor={false}
                   content={<ChartTooltipContent hideLabel />}
                 />
-                <Pie
-                  data={chartData}
-                  dataKey="count"
-                  nameKey="taskType"
-                  innerRadius={60}
-                  strokeWidth={5}
-                >
+                <Pie data={chartData} dataKey="count" nameKey="taskType" innerRadius={60} strokeWidth={5}>
                   <Label
                     content={({ viewBox }) => {
                       if (viewBox && "cx" in viewBox && "cy" in viewBox) {
@@ -80,16 +65,8 @@ const TaskAnalysis = ({ currentUser }: { currentUser: any }) => {
                               x={viewBox.cx}
                               y={viewBox.cy}
                               className="fill-foreground text-3xl font-bold"
-                            >
-                              {'1234'}
-                            </tspan>
-                            <tspan
-                              x={viewBox.cx}
-                              y={(viewBox.cy || 0) + 24}
-                              className="fill-muted-foreground"
-                            >
-                              Tasks
-                            </tspan>
+                            >{chartData[4]}</tspan>
+                            <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground"> Tasks </tspan>
                           </text>
                         )
                       }

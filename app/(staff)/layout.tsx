@@ -1,6 +1,3 @@
-import AdminSidebar from '@/components/admin/AdminSidebar'
-import AdminTopbar from '@/components/admin/AdminTopbar'
-import { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
 import React from 'react'
 import { authOptions } from '../api/auth/[...nextauth]/route';

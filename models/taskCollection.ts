@@ -64,4 +64,3 @@ const TasksSchema: Schema = new Schema({
 const Tasks = mongoose.models?.Tasks || mongoose.model<ITasks>('Tasks', TasksSchema);
 
 export default Tasks;
-

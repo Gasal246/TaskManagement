@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
             case 'new':
                 query = { AccessTo: userid, IsApproved: false }; break;
             case 'ongoing':
-                query = { AccessTo: userid, IsApproved: true }; break;
+                query = { AccessTo: userid, IsApproved: true, IsCompleted: false || null }; break;
             case 'owned':
                 query = { Creator: userid }; break;
             case 'ended':

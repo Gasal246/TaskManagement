@@ -49,6 +49,10 @@ export async function GET(req: NextRequest, { params }:{ params: { projectid: st
                     notApprovedProjectIds: [
                         { $match: { IsApproved: false } },
                         { $project: { _id: 1 } }
+                    ],
+                    completedProjectIds: [
+                        { $match: { IsCompleted: true } },
+                        { $project: { _id: 1 } }
                     ]
                 }
             }

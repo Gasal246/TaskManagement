@@ -11,13 +11,15 @@ export async function GET(req: NextRequest, { params }: { params: { userid: stri
             const completedActivities = task?.Activities?.filter((activity: any) => activity?.Completed);
             return completedActivities?.length === task?.Activities?.length;
         });
-        const unreadedTasks = tasks.filter((task: any) => !(task?.EnrolledBy?.includes(params?.userid)));
-        const createdTasks = tasks.filter((task: any) => task?.Creator == params.userid )
+        const unreadedTasks = tasks.filter((task: any) => (task?.ForwardList?.includes(params?.userid) && !task?.AcceptedBy));
+        const createdTasks = tasks.filter((task: any) => task?.Creator == params.userid );
+        const acceptedTasks = tasks.filter((task: any) => task?.AcceptedBy == params.userid);
         const result = {
             totalTasks: tasks.length,
             completedTasks: completedTasks?.length,
             unreadedTasks: unreadedTasks?.length,
-            ownedTasks: createdTasks?.length
+            ownedTasks: createdTasks?.length,
+            acceptedTasks: acceptedTasks?.length,
         }
         console.log(result)
         return Response.json(result);

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { QUERY_KEYS } from "../queryKeys";
-import { addNewTask, deleteTask, findByMail, findUserById, getTaskComments, getTaskById, sendEmailVerificationOtp, setupNewPassword, verifyOTP, addTaskComment, removeTaskComment, getChoosableStaffs, getAllNotifications, notificationInview, resetPassword, getUserRole, getAllTasks, sendMagicLink } from "./fn/userFunctions";
+import { addNewTask, deleteTask, findByMail, findUserById, getTaskComments, getTaskById, sendEmailVerificationOtp, setupNewPassword, verifyOTP, addTaskComment, removeTaskComment, getChoosableStaffs, getAllNotifications, notificationInview, resetPassword, getUserRole, getAllTasks, sendMagicLink, findHeadByUserid } from "./fn/userFunctions";
 
 export const useFindByMailId = () => {
     const queryClient = useQueryClient();
@@ -31,6 +31,14 @@ export const useFindUserById = (userid: string) => {
     return useQuery({
         queryKey: [QUERY_KEYS.GET_USER_BY_ID, userid],
         queryFn: async () => await findUserById(userid),
+        enabled: !!userid
+    })
+}
+
+export const useFindHeadInfo = ( userid: string ) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_HEAD_INFO],
+        queryFn: async () => await findHeadByUserid(userid),
         enabled: !!userid
     })
 }

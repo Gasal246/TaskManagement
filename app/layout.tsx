@@ -6,7 +6,6 @@ import "./globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import { Toaster } from "@/components/ui/sonner";
-import { redirect } from "next/navigation";
 import TanstackProvider from "@/query/TanstackProvider";
 
 const ar_one_sans = AR_One_Sans({ subsets: ["latin"] });
@@ -40,6 +39,6 @@ export default async function RootLayout({
           </TanstackProvider>
         </SessionProvider>
       </body>
-    </html>
+    </html >
   );
 }
