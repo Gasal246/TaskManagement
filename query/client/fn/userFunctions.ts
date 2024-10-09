@@ -172,3 +172,13 @@ export async function getUserRole ( userid: string ) {
         console.log(error);
     }
 }
+
+export async function getUserUnderUserid ( userid: string ) {
+    try {
+        const res = await axios.get(`/api/users/staffs-under/${userid}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+

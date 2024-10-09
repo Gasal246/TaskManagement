@@ -21,7 +21,7 @@ const formSchema = z.object({
     address: z.string(),
 })
 
-const AddClientsDialog = ({ currentUser }: { currentUser: any }) => {
+const AddClientsDialog = ({ currentUser, trigger }: { currentUser: any, trigger?: React.ReactNode }) => {
     const [phone, setPhone] = useState<any>();
     const [region, setRegion] = useState('');
     const [area, setArea] = useState('');
@@ -61,7 +61,7 @@ const AddClientsDialog = ({ currentUser }: { currentUser: any }) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}><Button>Add Client</Button></motion.div>
+                {trigger || <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}><Button>Add Client</Button></motion.div>}
             </DialogTrigger>
             <DialogContent className='max-h-[90dvh] overflow-y-scroll'>
                 <DialogHeader>
@@ -99,7 +99,7 @@ const AddClientsDialog = ({ currentUser }: { currentUser: any }) => {
                         <div>
                             <label className='text-sm'>Phone</label>
                             <div className='border-2 p-2 rounded-lg'>
-                                <PhoneInput placeholder="Enter phone number" value={phone} onChange={setPhone} className='bg-transparent' />
+                                <PhoneInput placeholder="phone number with country code." value={phone} onChange={setPhone} className='bg-transparent' />
                             </div>
                         </div>
                         <RegionAndAreaFilter setRegion={setRegion} setArea={setArea} currentUser={currentUser} placeholder='select region' />

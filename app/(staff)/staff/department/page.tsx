@@ -10,21 +10,23 @@ import { Progress } from '@/components/ui/progress'
 import AddDepartmentRegion from '@/components/staff/AddDepartmentRegion'
 import { DataTable } from './data-table'
 import { columns } from './columns'
+import { useGetDepartmentByUserId } from '@/query/client/staffQueries'
 
 const StaffDepartment = () => {
-  const { data: session } = useSession();
+  const { data: session }: any = useSession();
   const router = useRouter();
+  const { data: departmentData, isLoading: loadingDepartment } = useGetDepartmentByUserId(session?.user?.id);
 
   return (
     <div className='p-4'>
       <div className="bg-slate-950/50 rounded-lg p-3 mb-3">
-        <h1 className='flex items-center gap-1'><CubeIcon /> Department Name</h1>
+        <h1 className='flex items-center gap-1'><CubeIcon /> {departmentData?.DepartmentName}</h1>
       </div>
       <div className="bg-slate-950/50 rounded-lg p-3 mb-3 flex flex-wrap items-center">
         <div className="w-full lg:w-1/2 p-1">
           <div className="bg-slate-950/50 rounded-lg p-3">
-            <h1 className='text-xs text-cyan-500 leading-3'>Allowed Staffs: <span className='text-xs text-slate-400'>10</span></h1>
-            <h1 className='text-xs text-cyan-500 leading-3'>Total Staffs: <span className='text-xs text-slate-400'>5</span></h1>
+            <h1 className='text-xs text-cyan-500 leading-3'>Allowed Staffs: <span className='text-xs text-slate-400'>{departmentData?.MaximumStaffs}</span></h1>
+            <h1 className='text-xs text-cyan-500 leading-3'>Total Staffs: <span className='text-xs text-slate-400'>{departmentData?.Staffs?.length}</span></h1>
             <div className="flex gap-1 items-center">
               <Progress value={30} />
               <h1 className='text-xs text-slate-400'>30%</h1>

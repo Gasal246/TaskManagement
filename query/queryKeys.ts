@@ -37,6 +37,7 @@ export enum QUERY_KEYS {
     GET_USER_ROLE="getUserRoleById",
     GET_DEPARTMENTS_BY_HEADID = "getDepartmentsByHeadId",
     GET_HEAD_INFO = "getHeadByUserId",
+    GET_STAFFS_UNDER_USERID = "getStaffsUnderUserId",
 
     // project keys
     GET_ALL_PROJECTS = "getAllProjects",

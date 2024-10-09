@@ -44,3 +44,13 @@ export async function deleteClient(clientId: string) {
         console.log(error);
     }
 }
+
+export async function clientOnView( clientId: string ) {
+    try {
+        const res = await axios.post(`/api/client/action/onview`, { clientId });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+

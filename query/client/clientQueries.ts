@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from "../queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addClient, deleteClient, getClientById, getClients, updateClient } from "./fn/clientFn";
+import { addClient, clientOnView, deleteClient, getClientById, getClients, updateClient } from "./fn/clientFn";
 
 export const useGetAllClients = (userid: string) => {
     return useQuery({
@@ -56,3 +56,19 @@ export const useDeleteClient = () => {
         }
     })
 }
+
+export const useClientOnView = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (clientId: string) => clientOnView(clientId),
+        onSuccess: (data: any) => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_ALL_CLIENTS]
+            })
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_CLIENT_BY_ID, data?._id]
+            })
+        }
+    })
+}
+

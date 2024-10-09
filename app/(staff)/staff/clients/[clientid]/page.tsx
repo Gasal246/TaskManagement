@@ -1,24 +1,44 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import { ProjectCard } from '@/components/admin/ProjectCards'
 import UpdateClientDialog from '@/components/client/UpdateClientDialog'
 import RegionAndAreaFilter from '@/components/shared/RegionAndAreaFilter'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { useSession } from 'next-auth/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Popconfirm } from 'antd'
+import { Popconfirm, Skeleton } from 'antd'
 import { Button } from '@/components/ui/button'
+import { useClientOnView, useGetClientById } from '@/query/client/clientQueries'
+import { formatDateTiny } from '@/lib/utils'
+import ProjectCardsSkeleton from '@/components/skeletons/ProjectCardsSkeleton'
+import { useFindUserById } from '@/query/client/userQueries'
+import { useInView } from 'react-intersection-observer'
 
 const StaffClientId = ({ params }: { params: { clientid: string } }) => {
     const { data: session }: any = useSession();
     const [area, setArea] = useState('');
     const [region, setRegion] = useState('');
+    const { data: currentUser, isLoading: loadingUser } = useFindUserById(session?.user?.id);
+    const { data: clientData, isLoading: loadingClient } = useGetClientById(params.clientid);
+
+    const { ref, inView } = useInView();
+    const { mutate: executeClientOnView, isPending: pendingClientOnView } = useClientOnView()
+    const handleClientOnView = async () => {
+        executeClientOnView(params?.clientid)
+    }
+    useEffect(() => {
+        if (inView) {
+            handleClientOnView()
+        }
+    }, [inView])
 
     const handleDeleteClient = async (clientid: string) => {
 
     }
+
     return (
-        <div className='p-4'>
+        <div className='p-4' ref={ref}>
             <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
@@ -26,17 +46,17 @@ const StaffClientId = ({ params }: { params: { clientid: string } }) => {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbPage>client name</BreadcrumbPage>
+                        <BreadcrumbPage>{clientData?.Name}</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
             <div className="mt-3 bg-slate-950/50 rounded-lg p-3 flex justify-between flex-wrap items-center mb-1">
                 <div>
-                    <h1 className='leading-5 text-slate-200'>Client Name</h1>
-                    <h4 className='text-xs text-slate-300'>client@gmail.com</h4>
+                    <h1 className='leading-5 text-slate-200'>{clientData?.Name}</h1>
+                    <h4 className='text-xs text-slate-300'>{clientData?.Email}</h4>
                 </div>
                 <div className="p-1 flex gap-1 items-center">
-                    <UpdateClientDialog clientData={{}} currentUser={{}} />
+                    {clientData ? <UpdateClientDialog clientData={clientData} currentUser={currentUser} /> : <Skeleton className='w-[130px] rounded-lg h-[30px]' />}
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                         <Popconfirm title="Delete Client ?" description="Projects and tasks assosiated with this client will also be deleted ?" overlayClassName='w-[280px]' onConfirm={() => handleDeleteClient('clientid')}><Button className='bg-red-700 hover:bg-red-600 text-white'>{'Delete'}</Button></Popconfirm>
                     </motion.div>
@@ -45,26 +65,24 @@ const StaffClientId = ({ params }: { params: { clientid: string } }) => {
             <div className="flex flex-wrap">
                 <div className="w-full lg:w-1/2 p-1">
                     <div className="bg-slate-950/50 rounded-lg p-2 text-xs text-cyan-500 font-medium">
-                        Phone: <pre className='text-slate-300 font-light text-sm'>+919961680844</pre>
+                        Phone: <pre className='text-slate-300 font-light text-sm'>{clientData?.Phone}</pre>
                     </div>
                 </div>
                 <div className="w-full lg:w-1/2 p-1">
                     <div className="bg-slate-950/50 rounded-lg p-2 text-xs text-cyan-500 font-medium">
-                        Region/Area: <pre className='text-slate-300 font-light text-sm'>India/Kerala</pre>
+                        Region/Area: <pre className='text-slate-300 font-light text-sm'>{clientData?.Region?.RegionName}/{clientData?.Area?.Areaname}</pre>
                     </div>
                 </div>
                 <div className="w-full lg:w-1/2 p-1">
                     <div className="bg-slate-950/50 rounded-lg p-2 text-xs text-cyan-500 font-medium">
                         Other Info:
-                        <pre className="text-slate-300 font-light text-sm text-wrap"> Lorem, ipsum dolor.
-                            Lorem, ipsum.
-                            Lorem.</pre>
+                        <pre className="text-slate-300 font-light text-sm text-wrap">{clientData?.Details}</pre>
                     </div>
                 </div>
                 <div className="w-full lg:w-1/2 p-1">
                     <div className="bg-slate-950/50 rounded-lg p-2 text-xs text-cyan-500 font-medium">
-                        Created: <span className="text-slate-300 font-light text-xs text-wrap"> 2024 sept 1</span> <br />
-                        Updated: <span className="text-slate-300 font-light text-xs text-wrap"> 2024 sept 20</span>
+                        Created: <span className="text-slate-300 font-light text-xs text-wrap"> {formatDateTiny(clientData?.createdAt)}</span> <br />
+                        Updated: <span className="text-slate-300 font-light text-xs text-wrap"> {formatDateTiny(clientData?.updatedAt)}</span>
                     </div>
                 </div>
             </div>
@@ -74,10 +92,13 @@ const StaffClientId = ({ params }: { params: { clientid: string } }) => {
                     <RegionAndAreaFilter currentUser={{}} setArea={setArea} setRegion={setRegion} placeholder='All Regions' />
                 </div>
                 <div className="flex flex-wrap items-center">
-                    <div className="w-full lg:w-4/12 p-1">
-                        <ProjectCard project={{}} userRole={''} />
-                    </div>
-                    {/* <h1 className='text-xs text-slate-400'>No Projects Under this Client.</h1> */}
+                    {loadingClient && <ProjectCardsSkeleton />}
+                    {clientData?.Projects?.map((project: any) => (
+                        <div className="w-full lg:w-3/12 p-1" key={project?._id}>
+                            <ProjectCard project={project} userRole={currentUser?.Role} />
+                        </div>
+                    ))}
+                    {clientData?.Projects?.length <= 0 && <h1 className='text-xs text-slate-400'>No Projects Under this Client.</h1>}
                 </div>
             </div>
         </div>

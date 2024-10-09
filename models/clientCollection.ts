@@ -24,7 +24,7 @@ const ClientsSchema: Schema = new Schema({
   Phone: { type: String },
   AddedBy: [{ type: Schema.Types.ObjectId, ref: "Users" }],
   AdminId: { type: Schema.Types.ObjectId, ref: "Users" },
-  OpendedBy: [{ type: Schema.Types.ObjectId, ref: "Users" }]
+  OpenedBy: [{ type: Schema.Types.ObjectId, ref: "Users" }]
 }, { timestamps: true });
 
 const Clients = mongoose.models?.Clients || mongoose.model<IClients>('Clients', ClientsSchema);
