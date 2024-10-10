@@ -9,7 +9,7 @@ import { SquareLibrary, UsersIcon } from 'lucide-react'
 const SuperSidebar = () => {
     const pathname = usePathname();
     return (
-        <div className={`w-full h-full dark:bg-slate-900 bg-slate-400 relative overflow-hidden`}>
+        <div className={`w-full h-screen dark:bg-slate-900 bg-slate-400 overflow-hidden`}>
             <Link href="/superadmin">
                 <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className={`${pathname === '/superadmin' ? 'dark:bg-cyan-950 bg-blue-400 border-b border-slate-700' : 'dark:bg-slate-800 bg-slate-50'} w-full p-2 font-medium text-start flex gap-2 items-center hover:border-b hover:border-slate-700`}>
                     <DashboardIcon /> Inventory Insights

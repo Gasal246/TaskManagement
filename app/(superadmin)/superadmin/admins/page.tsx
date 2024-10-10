@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
 import useDebounce from '@/hooks/useDebounce'
+import LoaderSpin from '@/components/shared/LoaderSpin'
 
 const AdminsManaging = () => {
     const { data: allAdmin, isLoading: loadingAllAdmin } = useGetAdmins('all');
@@ -45,10 +46,10 @@ const AdminsManaging = () => {
 
     return (
         <div className='p-4'>
-            <div className="flex justify-between">
+            <div className="flex justify-between bg-slate-950/50 p-3 rounded-lg items-center">
                 <h1 className='font-semibold text-xl'>Admin Management</h1>
                 <Link href="/superadmin/admins/add-admin">
-                    <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className='p-2 bg-slate-800 hover:bg-cyan-950 rounded-md px-3 border border-slate-600 cursor-pointer'>
+                    <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className='p-2 bg-slate-800 border-2 hover:bg-cyan-950 rounded-md px-3    border-slate-600 cursor-pointer'>
                         Add Admins
                     </motion.button>
                 </Link>
@@ -80,7 +81,7 @@ const AdminsManaging = () => {
             </div>}
             {
                 loadingAdminMonthly || loadingAdminTodays || loadingAllAdmin || datedDataLoading ?
-                    <h1 className='flex gap-2'><Image src='/icons/loadingspin.svg' alt='loaderpng' width={30} height={30} /> please wait... Loading Admin Data.</h1> :
+                    <h1 className='flex gap-2'><LoaderSpin size={30} /> please wait... Loading Admin Data.</h1> :
                     (
                         !searchTerm &&
                         <Tabs defaultValue="all" className="w-full text-center">

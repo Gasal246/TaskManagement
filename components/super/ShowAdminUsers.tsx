@@ -3,7 +3,7 @@ import React from 'react'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, } from "@/components/ui/sheet"
 import { Avatar } from 'antd'
 
-const ShowAdminUsers = ({ trigger, adminData, adminUsers }: { trigger: React.ReactNode, adminData: any, adminUsers: any }) => {
+const ShowAdminUsers = ({ trigger, adminData }: { trigger: React.ReactNode, adminData: any }) => {
     return (
         <Sheet>
             <SheetTrigger className='w-full'>{trigger}</SheetTrigger>
@@ -21,7 +21,7 @@ const ShowAdminUsers = ({ trigger, adminData, adminUsers }: { trigger: React.Rea
                     </SheetDescription>
                 </SheetHeader>
                 <div className="flex flex-col gap-2 justify-center items-center mt-6">
-                    {adminUsers?.map((user: any) => (
+                    {adminData?.adminUsers?.map((user: any) => (
                         <div className="bg-slate-800 hover:bg-slate-900 border border-slate-700 p-2 rounded-md w-full lg:w-[80%] gap-2 flex justify-between items-center" key={user?._id}>
                             <div className="flex gap-1 items-center lg:w-[250px]">
                                 <Avatar src={user?.AvatarUrl || '/avatar.png'} />

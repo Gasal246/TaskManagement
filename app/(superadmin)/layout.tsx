@@ -24,9 +24,9 @@ const SuperAdminLayout = async ({ children }: { children: React.ReactNode }) => 
   return (
     <div className='w-full h-screen overflow-hidden'>
       <SuperTopbar />
-      <div className="flex w-full h-full">
-        <div className="w-2/12 h-full"><SuperSidebar /></div>
-        <div className="w-10/12 h-full">{children}</div>
+      <div className="flex">
+        <div className="w-2/12"><SuperSidebar /></div>
+        <div className="w-10/12">{children}</div>
       </div>
     </div>
   )

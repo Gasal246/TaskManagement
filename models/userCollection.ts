@@ -23,6 +23,12 @@ export interface IUsers extends Document {
   AvatarUrl: String | null;
   Status: String | null;
   IsDeleted: Boolean;
+  Address: {
+    Country: String;
+    Province: String;
+    City: String;
+    Pin: String;
+  }
   Role: 'admin' | 'staff' | 'area-head' | 'dep-head' | 'region-head' | 'dep-staff' | 'reg-staff';
 }
 
@@ -36,6 +42,12 @@ const UsersSchema: Schema = new Schema({
      ExpireAt: { type: Date },
      RemindAt: { type: Date },
   }],
+  Address: {
+    Country: { type: String },
+    City: { type: String },
+    Province: { type: String },
+    Pin: { type: String }
+  },
   Skills: [{ type: String,  }],
   Addedby: { type: Schema.Types.ObjectId },
   InitialEntry: { type: Boolean, default: true },

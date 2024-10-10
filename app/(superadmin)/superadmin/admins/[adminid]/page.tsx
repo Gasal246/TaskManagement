@@ -34,12 +34,6 @@ const AdminPage = ({ params }: { params: { adminid: string } }) => {
   const { mutateAsync: deleteAdmin, isPending: deletingAdmin } = useDeleteAdmin();
   const { mutateAsync: deleteAdminDoc, isPending: deletingAdminDoc } = useDeleteAdminDoc();
   const { mutateAsync: deleteAdminDep, isPending: deletingAdminDep } = useDeleteAdminDep();
-  const { data: adminUsers, isLoading: adminUsersLoading, refetch: refechAdminUsers } = useGetAdminUsers(adminData?.AdminId?._id)
-  useEffect(() => {
-    if (adminData) {
-      refechAdminUsers();
-    }
-  }, [adminData])
 
   const handleStatusChange = async (value: any) => {
     const response = await changeAdminStatus({ adminid: params.adminid, status: value });
@@ -146,31 +140,31 @@ const AdminPage = ({ params }: { params: { adminid: string } }) => {
         </div>
       </div>
 
-      {!adminUsers || adminUsersLoading ? <AdminCountBoxSkelton /> :
+      {adminDataLoading ? <AdminCountBoxSkelton /> :
         <div className="flex flex-wrap mt-5">
           <div className="w-full md:w-2/12 p-1">
             <ShowAdminUsers trigger={
               <Tooltip title="view all users"><motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="bg-slate-900 border-slate-600 border p-3 rounded-md aspect-auto cursor-pointer select-none">
                 <h2 className='text-sm font-medium'>Total Users</h2>
                 <div className="justify-center items-center">
-                  <h1 className='text-center text-[4em] font-black '>{adminUsers?.length}</h1>
+                  <h1 className='text-center text-[4em] font-black '>{formatNumber(adminData?.adminUsers?.length || 0)}</h1>
                 </div>
               </motion.div></Tooltip>
-            } adminData={adminData} adminUsers={adminUsers} />
+            } adminData={adminData} />
           </div>
           <div className="w-full md:w-2/12 p-1">
             <div className="bg-slate-900 border-slate-600 border p-3 rounded-md aspect-auto">
               <h2 className='text-sm font-medium'>Total Projects</h2>
               <div className="justify-center items-center">
-                <h1 className='text-center text-[4em] font-black '>5</h1>
+                <h1 className='text-center text-[4em] font-black '>{formatNumber(adminData?.projectCount || 0)}</h1>
               </div>
             </div>
           </div>
           <div className="w-full md:w-2/12 p-1">
             <div className="bg-slate-900 border-slate-600 border p-3 rounded-md aspect-auto">
-              <h2 className='text-sm font-medium'>Ongoing Projects</h2>
+              <h2 className='text-sm font-medium'>Total Tasks</h2>
               <div className="justify-center items-center">
-                <h1 className='text-center text-[4em] font-black '>{formatNumber(5)}</h1>
+                <h1 className='text-center text-[4em] font-black '>{formatNumber(adminData?.taskCount || 0)}</h1>
               </div>
             </div>
           </div>
