@@ -162,9 +162,9 @@ export async function deleteStaff(staffid: string){
     }
 }
 
-export async function updateStaff(staffid: string, Email: string, Name: string, Region: string, Area: string ){
+export async function updateStaff(formData: FormData){
     try {
-        const res = await axios.post('/api/staff/edit-staff', { staffid, Email, Name, Region, Area });
+        const res = await axios.post('/api/staff/edit-staff', formData);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -257,6 +257,24 @@ export async function deleteDepartmentArea(depid: string, regionid: string, area
 export async function getStaffsRegionAndArea(adminid: string){
     try {
         const res = await axios.get(`/api/staff/get-staffs-region-area/${adminid}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getSelectableRegionalHeads(userid: string) {
+    try {
+        const res = await axios.get(`/api/staff/select/regionalhead/${userid}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getSelectableAreaHead(userid: string) {
+    try {
+        const res = await axios.get(`/api/staff/select/areahead/${userid}`);
         return res.data;
     } catch (error) {
         console.log(error);

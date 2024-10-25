@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import * as React from "react"
 import {
@@ -28,16 +29,19 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import RegionAndAreaFilter from "@/components/shared/RegionAndAreaFilter"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
-    data: TData[]
+    data: TData[],
+    currentUser: any,
 }
 
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    currentUser
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -62,6 +66,22 @@ export function DataTable<TData, TValue>({
         },
     })
 
+    const [ region, setRegion ] = React.useState('');
+    const [ area, setArea ] = React.useState('');
+
+    React.useEffect(() => {
+        if(region){
+            table.getColumn("Region.RegionName")?.setFilterValue(region)
+        }else{
+            table.getColumn("Region.RegionName")?.setFilterValue('')
+        }
+        if(area){
+            table.getColumn("Area.Areaname")?.setFilterValue(area)
+        }else {
+            table.getColumn("Area.Areaname")?.setFilterValue('')
+        }
+    }, [area, region])
+
     return (
         <div>
             <div className="flex items-center py-4">
@@ -71,36 +91,9 @@ export function DataTable<TData, TValue>({
                     onChange={(event) =>
                         table.getColumn("Email")?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm"
+                    className="w-[300px] mr-3"
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter(
-                                (column) => column.getCanHide()
-                            )
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <RegionAndAreaFilter setArea={setArea} setRegion={setRegion} currentUser={currentUser} getName={true} />
             </div>
             <div className="rounded-md border">
                 <Table>

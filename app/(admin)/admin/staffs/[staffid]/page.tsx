@@ -82,7 +82,7 @@ const StaffPage = ({ params }: { params: { staffid: string } }) => {
   }
 
   return (
-    <div className='p-5 overflow-y-scroll h-[95dvh] pb-20'>
+    <div className='p-5 overflow-y-scroll pb-20'>
       <Breadcrumb className='mb-3'>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -147,12 +147,45 @@ const StaffPage = ({ params }: { params: { staffid: string } }) => {
         </div>
       </div>
         <div className="flex gap-1 mb-3">
-          <Tooltip title={`${staffLoading ? 'loading..' : 'Region'}`}><h1 className='flex gap-1 bg-slate-700 p-1 px-3 text-sm rounded-md'><Globe2 size={20} /> {staffData?.Region?.RegionName}</h1></Tooltip>
-          <Tooltip title={`${staffLoading ? 'loading..' : 'Area'}`}><h1 className='flex gap-1 bg-slate-700 p-1 px-3 text-sm rounded-md'><LandPlot size={20} /> {staffData?.Area?.Areaname}</h1></Tooltip>
+          <Tooltip title={`${staffLoading ? 'loading..' : 'Region'}`}><h1 className='flex gap-1 bg-slate-700 p-1 px-3 text-sm rounded-md'><Globe2 size={20} /> {staffData?.Region ? staffData?.Region.RegionName : 'no region'}</h1></Tooltip>
+          <Tooltip title={`${staffLoading ? 'loading..' : 'Area'}`}><h1 className='flex gap-1 bg-slate-700 p-1 px-3 text-sm rounded-md'><LandPlot size={20} /> {staffData?.Area ? staffData?.Area.Areaname : 'no area'}</h1></Tooltip>
         </div>
+        <h1 className='text-xs text-slate-400'>{staffData?.Department ? staffData?.Department?.DepartmentName : "not added to any departments"}</h1>
       </div>
       }
 
+      <div className="bg-slate-950/50 p-2 rounded-lg mb-3 grid lg:grid-cols-2 grid-cols-1">
+        <div className="p-1">
+          <div className="bg-slate-950/50 rounded-lg p-2">
+            <h2 className='text-xs font-medium text-slate-400'>Phone</h2>
+            <h3 className='text-sm text-slate-300'>{staffData?.Phone || 'not added'}</h3>
+          </div>
+        </div>
+        <div className="p-1">
+          <div className="bg-slate-950/50 rounded-lg p-2">
+            <h2 className='text-xs font-medium text-slate-400'>Country</h2>
+            <h3 className='text-sm text-slate-300'>{staffData?.Address?.Country || 'not added'}</h3>
+          </div>
+        </div>
+        <div className="p-1">
+          <div className="bg-slate-950/50 rounded-lg p-2">
+            <h2 className='text-xs font-medium text-slate-400'>Province</h2>
+            <h3 className='text-sm text-slate-300'>{staffData?.Address?.Province || 'not added'}</h3>
+          </div>
+        </div>
+        <div className="p-1">
+          <div className="bg-slate-950/50 rounded-lg p-2">
+            <h2 className='text-xs font-medium text-slate-400'>City</h2>
+            <h3 className='text-sm text-slate-300'>{staffData?.Address?.City || 'not added'}</h3>
+          </div>
+        </div>
+        <div className="p-1">
+          <div className="bg-slate-950/50 rounded-lg p-2">
+            <h2 className='text-xs font-medium text-slate-400'>Pin</h2>
+            <h3 className='text-sm text-slate-300'>{staffData?.Address?.Pin || 'not added'}</h3>
+          </div>
+        </div>
+      </div>
 
       <div className="mb-4 bg-slate-950/50 p-3 py-5 rounded-lg">
         <h1 className='text-sm mb-1'>Skills:</h1>

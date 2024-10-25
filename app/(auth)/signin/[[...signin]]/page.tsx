@@ -55,7 +55,7 @@ const LoginPage = () => {
             })
             if (response?.error) {
                 toast("Login Failed!", {
-                    description: "There is a mismatch in provided credentials."
+                    description: response.error
                 })
             }
             if (response?.ok) {

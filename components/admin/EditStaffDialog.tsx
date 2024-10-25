@@ -15,8 +15,13 @@ import { toast } from 'sonner';
 const formSchema = z.object({
     Email: z.string().min(2),
     Name: z.string().min(2),
-    Region: z.string(),
-    Area: z.string()
+    Region: z.string().optional(),
+    Area: z.string().optional(),
+    Phone: z.string().optional(),
+    Country: z.string().optional(),
+    Province: z.string().optional(),
+    City: z.string().optional(),
+    Pin: z.string().optional(),
 })
 
 const EditStaffDialog = ({ trigger, staffData }: { trigger: React.ReactNode, staffData: any }) => {
@@ -29,11 +34,16 @@ const EditStaffDialog = ({ trigger, staffData }: { trigger: React.ReactNode, sta
             Email: staffData?.Email,
             Name: staffData?.Name,
             Region: staffData?.Region?._id,
-            Area: staffData?.Area?._id
+            Area: staffData?.Area?._id,
+            Phone: staffData?.Phone || '',
+            Country: staffData?.Address?.Country,
+            Province: staffData?.Address?.Province,
+            City: staffData?.Address?.City || '',
+            Pin: staffData?.Address?.Pin || ''
         },
     })
     const selectedRegion = form.watch('Region');
-    const { data: allAreas, isLoading: areasLoading, refetch: refetchAreas } = useGetAllAreas(selectedRegion);
+    const { data: allAreas, isLoading: areasLoading, refetch: refetchAreas } = useGetAllAreas(selectedRegion || '');
     useEffect(() => {
         if (selectedRegion) {
             refetchAreas();
@@ -41,7 +51,20 @@ const EditStaffDialog = ({ trigger, staffData }: { trigger: React.ReactNode, sta
     }, [selectedRegion, refetchAreas]);
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const response = await updateStaff({ staffid: staffData?._id, Name: values.Name, Email: values.Email, Region: values.Region, Area: values.Area });
+        const formData = new FormData();
+        formData.append("usereditform", JSON.stringify({
+            staffid: staffData?._id,
+            Name: values.Name,
+            Email: values.Email,
+            Region: values.Region,
+            Area: values.Area,
+            Phone: values.Phone,
+            Country: values.Country,
+            Province: values.Province,
+            City: values.City,
+            Pin: values.Pin
+        }));
+        const response = await updateStaff(formData);
         if (response?.existing) {
             return toast.error("Staff Data Updation Failed", {
                 description: "The New Email is used by another staff."
@@ -53,7 +76,7 @@ const EditStaffDialog = ({ trigger, staffData }: { trigger: React.ReactNode, sta
     return (
         <Dialog>
             <DialogTrigger>{trigger}</DialogTrigger>
-            <DialogContent>
+            <DialogContent className='max-h-[85dvh] overflow-y-scroll'>
                 <DialogHeader>
                     <DialogTitle>Edit Staff Details ?</DialogTitle>
                 </DialogHeader>
@@ -125,6 +148,71 @@ const EditStaffDialog = ({ trigger, staffData }: { trigger: React.ReactNode, sta
                                             ))}
                                         </SelectContent>
                                     </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="Phone"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Phone</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="phone number with country code" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="Country"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Country</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="native country" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="Province"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Country Province</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="state or province of staff" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="City"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>City</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="local city name" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="Pin"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Pin code</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="pin or postal code" {...field} />
+                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}

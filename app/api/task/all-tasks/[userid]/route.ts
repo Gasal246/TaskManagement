@@ -4,14 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 connectDB();
 
-export async function GET(req: NextRequest, { params }:{ params: { userid: string }}){
+export async function GET(req: NextRequest, { params }: { params: { userid: string } }) {
     try {
         const searchParams: any = req.nextUrl.searchParams;
         const filter: TaskTypes = await searchParams.get('filter');
 
         let query = {}
-        switch(filter){
-            case 'new': 
+        switch (filter) {
+            case 'new':
                 query = { ForwardList: params.userid, AcceptedBy: null }; break;
             case 'created':
                 query = { Creator: params.userid }; break;
@@ -19,7 +19,9 @@ export async function GET(req: NextRequest, { params }:{ params: { userid: strin
                 query = { AcceptedBy: params.userid }; break;
             case 'completed':
                 query = { 'Activities.Completed': { $not: { $elemMatch: { $eq: false } } } }; break;
-            default: 
+            case 'ongoing':
+                query = { AdminId: params.userid, AcceptedBy: { $ne: null }}
+            default:
                 return new NextResponse("Invalid filter option", { status: 400 });
         }
         const tasks = await Tasks.find(query, {})
@@ -32,7 +34,7 @@ export async function GET(req: NextRequest, { params }:{ params: { userid: strin
                 select: { Title: 1 }
             });
         const tasklist = tasks.map((task: any) => {
-            const completed = task?.Activities?.filter((activity: any) => activity?.Completed )
+            const completed = task?.Activities?.filter((activity: any) => activity?.Completed)
             return { ...task?._doc, Progress: ((completed.length / task?.Activities?.length) * 100) }
         })
         return Response.json(tasklist);

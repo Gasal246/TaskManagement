@@ -22,7 +22,7 @@ export const authOptions: AuthOptions = {
                     if(credentials?.isSuper === 'false'){
                         const user = await Users.findOne({ Email: credentials?.email });
                         if(!user) throw new Error("No Such User Found.");
-                        if(user?.IsBlocked) throw new Error("User Is Blocked By Admin.");
+                        if(user?.Status == 'blocked') throw new Error("User Is Blocked By Admin.");
                         const passwordMatch = await compare(credentials?.password, user?.Password);
                         if(!passwordMatch) throw new Error("Invalid Credentials.");
                         return user;

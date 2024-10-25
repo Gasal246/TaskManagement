@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from "../queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addAreaHead, addDepartmentArea, addDepartmentHead, addDepartmentRegion, addNewArea, addNewRegion, addNewSkill, addNewStaff, addRegionalHead, addStaffDocument, addStaffSkill, addStaffToDepartment, changeProfilePic, deleteArea, deleteDepartmentArea, deleteDepartmentRegion, deleteRegion, deleteSkill, deleteStaff, deleteStaffDocument, editAreaName, editProfileInfo, editRegionName, editSkills, getAllAreas, getAllDepartments, getAllRegions, getAllSkills, getAllStaffs, getAreaById, getDepartmentById, getDepartmentRegion, getOneStaff, getRegionById, getStaffsRegionAndArea, removeDepartmentStaff, removeStaffSkill, updateStaff, updateStaffStatus } from "./fn/adminFn";
+import { addAreaHead, addDepartmentArea, addDepartmentHead, addDepartmentRegion, addNewArea, addNewRegion, addNewSkill, addNewStaff, addRegionalHead, addStaffDocument, addStaffSkill, addStaffToDepartment, changeProfilePic, deleteArea, deleteDepartmentArea, deleteDepartmentRegion, deleteRegion, deleteSkill, deleteStaff, deleteStaffDocument, editAreaName, editProfileInfo, editRegionName, editSkills, getAllAreas, getAllDepartments, getAllRegions, getAllSkills, getAllStaffs, getAreaById, getDepartmentById, getDepartmentRegion, getOneStaff, getRegionById, getSelectableAreaHead, getSelectableRegionalHeads, getStaffsRegionAndArea, removeDepartmentStaff, removeStaffSkill, updateStaff, updateStaffStatus } from "./fn/adminFn";
 
 export const useGetAllRegions = (adminid: string) => {
     return useQuery({
@@ -195,7 +195,7 @@ export const useDeleteStaff = () => {
 export const useUpdateStaff = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ staffid, Email, Name, Region, Area }: { staffid: string, Email: string, Name: string, Region: string, Area: string }) => updateStaff(staffid, Email, Name, Region, Area),
+        mutationFn: async (formData: FormData) => updateStaff(formData),
         onSuccess: (data: any) => {
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.GET_STAFF, data?._id]
@@ -318,6 +318,22 @@ export const useGetStaffsRegionArea = (adminid: string) => {
         queryKey: [QUERY_KEYS.GET_STAFFS_REGION_AREA, adminid],
         queryFn: async () => await getStaffsRegionAndArea(adminid),
         enabled: !!adminid
+    })
+}
+
+export const useGetSelectableRegionalHeads = (userid: string) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_SELECTABLE_REGIONAL_HEAD, userid],
+        queryFn: async () => getSelectableRegionalHeads(userid),
+        enabled: !!userid
+    })
+}
+
+export const useGetSelectableAreaHeads = (userid: string) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_SELECTABLE_AREA_HEAD, userid],
+        queryFn: async () => getSelectableAreaHead(userid),
+        enabled: !!userid
     })
 }
 

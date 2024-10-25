@@ -8,10 +8,12 @@ import { useGetAllStaffs } from '@/query/client/adminQueries'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import TableSkeleton from '@/components/skeletons/TableSkeleton'
+import { useFindUserById } from '@/query/client/userQueries'
 
 const Staffs = () => {
   const { data: session }: any = useSession();
   const { data: allStaffs, isPending: loadingStaffData } = useGetAllStaffs(session?.user?.id);
+  const { data: currentUser, isLoading: loadingUser } = useFindUserById(session?.user?.id);
   return (
     <div className='p-4'>
       <div className="flex justify-between items-center bg-slate-950/50 p-3 rounded-lg">
@@ -24,7 +26,7 @@ const Staffs = () => {
       </div>
       <div className="bg-slate-950/50 p-3 rounded-lg mt-3">
         {loadingStaffData && <TableSkeleton />}
-        {allStaffs && <DataTable columns={columns} data={allStaffs} />}
+        {allStaffs && <DataTable columns={columns} data={allStaffs} currentUser={currentUser} />}
       </div>
     </div>
   )

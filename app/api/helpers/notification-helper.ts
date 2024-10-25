@@ -40,3 +40,23 @@ export const removeNotification = async (receiverid: string, type: string) => {
         console.log(error);
     }
 }
+
+export const sendTrigger = async (channel: string, event: NotificationTypes, data?: any) => {
+    try {
+        const body = await JSON.stringify({
+            channel, event, data
+        })
+        const response = await fetch(`${process.env.COMM_SERVER_ADDRESS}/event-trigger`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: body,
+        });
+        console.log("Trigger Send!", response);
+        return response;
+    } catch (error) {
+        console.log("Notification Error: ", error)
+    }
+}
+

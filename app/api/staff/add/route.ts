@@ -2,26 +2,18 @@ import connectDB from "@/lib/mongo";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
-import { promises as fs } from 'fs';
-import path from "path";
 import Users from "@/models/userCollection";
 
 connectDB();
 
-interface Document {
-    DocName: string;
-    ExpireAt: string;
-    RemindAt: string;
-    DocUrl: string;
-}
-
 interface Body {
     Name: string;
     Email: string;
-    Region: string;
-    Area: string;
-    Skills: string;
-    [key: string]: any; // For dynamic document properties
+    Country: string | null;
+    Province: string | null;
+    City: string | null;
+    Skills: string[] | [],
+    Phone: string | null;
 }
 
 export async function POST(req: NextRequest) {
@@ -31,35 +23,27 @@ export async function POST(req: NextRequest) {
             return new NextResponse("Unauthorized Request Error.", { status: 401 });
         }
         const formData = await req.formData();
-        const body = Object.fromEntries(formData) as Body;
-        // console.log(body);
+        const { userform } = Object.fromEntries(formData) as { userform: string };
+        const body = await JSON.parse(userform) as Body;
+        console.log(body);
         const existing = await Users.findOne({ Email: body?.Email, Addedby: session?.user?.id, IsDeleted: false });
         if(existing){
             return Response.json({ existing: true });
-        }
-        
-        const documents: Document[] = [];
-        for (let i = 0; ; i++) {
-            const name = body[`documents[${i}][name]`];
-            if(!name) break;
-            documents.push({
-                DocName: body[`documents[${i}][name]`],
-                ExpireAt: body[`documents[${i}][expireAt]`],
-                RemindAt: body[`documents[${i}][remindAt]`],
-                DocUrl: body[`documents[${i}][file]`]
-            });
         }
 
         const newUser = new Users({
             Email: body?.Email,
             Name: body?.Name,
-            Skills: body?.Skills?.split(','),
-            Region: body?.Region,
-            Area: body?.Area,
+            Skills: body?.Skills,
+            Address: {
+                Country: body?.Country,
+                Province: body?.Province,
+                City: body?.City
+            },
+            Phone: body?.Phone,
             Status: 'unverified',
             InitialEntry: true,
             Addedby: session?.user?.id,
-            Documents: documents,
             Role: 'staff'
         });
         const savedUser = await newUser.save();

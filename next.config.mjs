@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["picsum.photos", "theprivateapp.com", "firebasestorage.googleapis.com"],
+    domains: ["picsum.photos", "theprivateapp.com", "firebasestorage.googleapis.com", process.env.COMM_SERVER_ADDRESS],
   },
   typescript: {
     // !! WARN !!

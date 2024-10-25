@@ -69,6 +69,7 @@ export const columns: ColumnDef<IUsers>[] = [
         },
     },
     {
+        id: "Region.RegionName",
         accessorKey: "Region.RegionName",
         header: ({ column }) => {
             return (
@@ -79,6 +80,7 @@ export const columns: ColumnDef<IUsers>[] = [
         },
     },
     {
+        id: "Area.Areaname",
         accessorKey: "Area.Areaname",
         header: ({ column }) => {
             return (

@@ -46,13 +46,13 @@ const RegionPage = ({ params }: { params: { region: string } }) => {
             <div className="flex justify-between my-3 items-center flex-wrap mb-4 bg-slate-950/50 p-3 rounded-lg">
                 <div className=''>
                     <h1 className='font-bold text-2xl flex gap-1 mb-1'>Region {regionLoading ? <LoaderSpin size={20} /> : regionData?.RegionName}</h1>
-                    <div className="flex gap-1 items-center">
+                    {regionData?.RegionHead && <div className="flex gap-1 items-center select-none cursor-pointer" onClick={() => router.push(`/admin/staffs/${regionData?.RegionHead?._id}`)}>
                         <Avatar src={regionData?.RegionHead?.AvatarUrl || '/avatar.png'} />
                         <div>
                             <h2 className='font-medium flex gap-1 leading-4'>{regionData?.RegionHead?.Name}</h2>
                             <h2 className='font-medium text-xs flex gap-1'>{regionData?.RegionHead?.Email}</h2>
                         </div>
-                    </div>
+                    </div>}
                     <h2 className='font-medium text-xs flex gap-1 text-orange-300'>{!regionData?.RegionHead && 'no Head for this region.'}</h2>
                 </div>
                 {regionData && <div className="flex gap-1 flex-wrap">

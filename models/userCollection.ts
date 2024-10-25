@@ -16,8 +16,6 @@ export interface IUsers extends Document {
   Region: ObjectId | null;
   Area: ObjectId | null;
   Department: ObjectId | null;
-  IsRegionalHead: Boolean | null;
-  IsAreaHead: Boolean | null;
   InitialEntry: Boolean | null;
   VerifyCode: String | null;
   AvatarUrl: String | null;
@@ -28,7 +26,8 @@ export interface IUsers extends Document {
     Province: String;
     City: String;
     Pin: String;
-  }
+  },
+  Phone: String | null;
   Role: 'admin' | 'staff' | 'area-head' | 'dep-head' | 'region-head' | 'dep-staff' | 'reg-staff';
 }
 
@@ -48,6 +47,7 @@ const UsersSchema: Schema = new Schema({
     Province: { type: String },
     Pin: { type: String }
   },
+  Phone: { type: String },
   Skills: [{ type: String,  }],
   Addedby: { type: Schema.Types.ObjectId },
   InitialEntry: { type: Boolean, default: true },

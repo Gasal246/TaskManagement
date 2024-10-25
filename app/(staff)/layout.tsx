@@ -11,7 +11,7 @@ export const generateMetadata = async () => {
   const session: any = await getServerSession(authOptions)
   const res = await axiosInstance.get(`/api/users/get-id/${session?.user?.id}`);
   return {
-    title: `TaskManager | ${res?.data?.Name}`
+    title: `TM | ${res?.data?.Name}`
   }
 }
 

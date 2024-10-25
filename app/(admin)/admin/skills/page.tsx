@@ -111,7 +111,7 @@ const SkillsPage = () => {
                 </Popover>
             </div>
             <div className="flex flex-wrap">
-                {(selectedItems.length === 0 ? allSkills?.Skills : selectedItems).map((skill: any) => (
+                {(selectedItems.length === 0 ? allSkills?.Skills : selectedItems)?.map((skill: any) => (
                     <div className="w-full lg:w-3/12 p-1" key={skill}>
                         <div className="bg-cyan-950 border border-slate-700 flex gap-1 items-center justify-between p-2 rounded-sm">
                             <h1 className='text-sm font-medium'>{skill}</h1>

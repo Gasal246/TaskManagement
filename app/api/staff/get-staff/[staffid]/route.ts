@@ -15,6 +15,10 @@ export async function GET(req: NextRequest, { params }: { params: { staffid: str
                 path: "Area",
                 select: { Areaname: 1 }
             })
+            .populate({
+                path: "Department",
+                select: { DepartmentName: 1 }
+            })
         if(staff?.IsDeleted){
             return Response.json({ isDeleted: true });
         }
