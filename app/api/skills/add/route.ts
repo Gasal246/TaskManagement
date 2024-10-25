@@ -6,21 +6,25 @@ import Skills from "@/models/skillsCollection";
 
 connectDB();
 
-export async function POST(req: NextRequest){
+export async function POST(req: NextRequest) {
     try {
         const session: any = await getServerSession(authOptions);
-        if(!session){
+        if (!session) {
             return new NextResponse("UnAuthorised Route", { status: 401 });
         }
         const { adminId, skill } = await req.json();
         const existing = await Skills.findOne({ AdminId: adminId });
-        if(existing){
-            const updatedSkill = await Skills.findOneAndUpdate({ AdminId: adminId }, { $push: { Skills: skill }}, { new: true });
+        if (existing) {
+            const allSkill = await Skills.findOne({ AdminId: adminId });
+            if (allSkill?.Skills?.some((s: string) => s.toLowerCase() === skill.toLowerCase())) {
+                return Response.json({ skillExist: true });
+            }
+            const updatedSkill = await Skills.findOneAndUpdate({ AdminId: adminId }, { $push: { Skills: skill } }, { new: true });
             return Response.json(updatedSkill);
         }
         const newSkill = new Skills({
             AdminId: adminId,
-            Skills: [ skill ]
+            Skills: [skill]
         });
         const savedSkill = await newSkill.save();
         return Response.json(savedSkill);

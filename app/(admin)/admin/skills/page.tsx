@@ -46,6 +46,8 @@ const SkillsPage = () => {
             const response = await addSkill({ adminId: session?.user?.id, skill: newSkill });
             if (response?._id) {
                 toast.success("New Skill Added.");
+            } else if (response?.skillExist){
+                toast.info("Skill Already Added!")
             } else {
                 toast.error("Something went wrong.");
             }
