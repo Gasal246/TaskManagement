@@ -33,17 +33,16 @@ const AddStaffSkillDialog = ({ trigger, staffid }: { trigger: React.ReactNode, s
                 <div className='flex flex-col gap-1'>
                     {allSkills?.Skills && (
                         <Select
-                            showSearch
-                            placeholder="Select the skill to add"
-                            optionFilterProp='label'
-                            onChange={(value: string) => setInput(value)}
-                            options={
-                                allSkills.Skills.map((skill: string) => ({
-                                    label: skill,
-                                    value: skill,
-                                }))
-                            }
-                        />
+                        showSearch
+                        placeholder="Select the skill to add"
+                        optionFilterProp="label"
+                        onChange={(value: string) => setInput(value)}
+                        options={allSkills.Skills.map((skill: string) => ({
+                            label: skill,
+                            value: skill,
+                        }))}
+                        getPopupContainer={(trigger) => trigger.parentNode}
+                    />
                     )}<Button onClick={handleAddSkill} disabled={addingSkill}>{addingSkill ? 'adding..' : 'Continue'}</Button>
                 </div>
             </DialogContent>
