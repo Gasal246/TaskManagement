@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { QUERY_KEYS } from "../queryKeys";
-import { addNewActivity, changeTaskTitle, checkingActivity, completeTask, editTask, getProjectTasks, inviewTask, removeTaskActivity } from "./fn/tasksFn";
+import { addNewActivity, changeTaskTitle, checkingActivity, completeTask, editTask, getProjectTasks, getTaskForwardable, inviewTask, removeTaskActivity } from "./fn/tasksFn";
 
 export const useAddNewTaskActivity = () => {
     const queryClient = useQueryClient();
@@ -133,6 +133,14 @@ export const useGetProjectTasks = (projectid: string) => {
         queryKey: [QUERY_KEYS.GET_PROJECT_TASKS, projectid],
         queryFn: async () => await getProjectTasks(projectid),
         enabled: !!projectid
+    })
+}
+
+export const useGetTaskForwardables = (userid: string) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_TASK_FORWARDABLE, userid],
+        queryFn: async () => await getTaskForwardable(userid),
+        enabled: !!userid
     })
 }
 

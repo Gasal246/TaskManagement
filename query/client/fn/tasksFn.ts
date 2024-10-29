@@ -81,3 +81,12 @@ export async function getProjectTasks (projectid: string) {
     }
 }
 
+export async function getTaskForwardable ( userid: string ) {
+    try {
+        const res = await axios.get(`/api/task/forwardto?userid=${userid}`);
+        return res.data;
+    } catch ( error ) {
+        console.log(error);
+    }
+}
+

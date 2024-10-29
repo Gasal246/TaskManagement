@@ -61,4 +61,5 @@ export enum QUERY_KEYS {
 
     // Task keys
     GET_PROJECT_TASKS = "getProjectTasks",
+    GET_TASK_FORWARDABLE = "getTaskForwardables",
 }
