@@ -8,3 +8,12 @@ export async function getDepartmentByUserid ( userid: string ) {
         console.log(error);
     }
 }
+
+export async function getSkillwiseUsers ( skill: string, companyid: string ) {
+    try {
+        const res = await axios.get(`/api/skills/get-users/${skill}?companyid=${companyid}`);
+        return res.data;
+    } catch (error) {
+        console.log(error)
+    }
+}

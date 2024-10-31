@@ -40,6 +40,8 @@ export enum QUERY_KEYS {
     GET_STAFFS_UNDER_USERID = "getStaffsUnderUserId",
     GET_SELECTABLE_REGIONAL_HEAD = "getSelectableReginalHead",
     GET_SELECTABLE_AREA_HEAD = "getSelectableAreaHead",
+    GET_DEPARTMENT_BY_USERID = "getDepartmentByUserId",
+    GET_SKILLWISE_USERS = "getSkillWiseUsers",
 
     // project keys
     GET_ALL_PROJECTS = "getAllProjects",

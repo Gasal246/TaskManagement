@@ -8,6 +8,7 @@ import { useAddNewSkill, useDeleteSkill, useEditSkill, useGetAllSkills } from '@
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Pencil, Trash2 } from 'lucide-react';
+import ViewSkillSlider from '@/components/admin/ViewSkillSlider';
 
 const SkillsPage = () => {
     const { data: session }:any = useSession();
@@ -116,7 +117,10 @@ const SkillsPage = () => {
                 {(selectedItems.length === 0 ? allSkills?.Skills : selectedItems)?.map((skill: any) => (
                     <div className="w-full lg:w-3/12 p-1" key={skill}>
                         <div className="bg-cyan-950 border border-slate-700 flex gap-1 items-center justify-between p-2 rounded-sm">
-                            <h1 className='text-sm font-medium'>{skill}</h1>
+                            <ViewSkillSlider
+                                trigger={<h1 className='text-sm font-medium'>{skill}</h1>}
+                                skill={skill} companyid={session?.user?.id}
+                            />
                             <div className='flex gap-1'>
                                 <Popover 
                                     content={
