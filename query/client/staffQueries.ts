@@ -12,8 +12,8 @@ export const useGetDepartmentByUserId = (userid: string) => {
 
 export const useGetSkillwiseUsers = (skill: string, companyid: string) => {
     return useQuery({
-        queryKey: [QUERY_KEYS.GET_SKILLWISE_USERS],
+        queryKey: [QUERY_KEYS.GET_SKILLWISE_USERS, skill, companyid],
         queryFn: async () => await getSkillwiseUsers(skill, companyid),
-        enabled: !!skill
-    })
-}
+        enabled: !!skill,
+    });
+};

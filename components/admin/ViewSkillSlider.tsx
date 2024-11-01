@@ -1,12 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, } from "@/components/ui/sheet"
 import { Avatar } from 'antd'
 import { useGetSkillwiseUsers } from '@/query/client/staffQueries'
 
 
 const ViewSkillSlider = ({ trigger, skill, companyid }: { trigger: React.ReactNode, skill: string, companyid: string }) => {
-    const { data: allUsers, isLoading: loadingUsers } = useGetSkillwiseUsers(skill, companyid)
+    const { data: allUsers, isLoading: loadingUsers, refetch: refetchStaffs } = useGetSkillwiseUsers(skill, companyid);
+    
     return (
         <Sheet>
             <SheetTrigger>{trigger}</SheetTrigger>
@@ -29,7 +31,7 @@ const ViewSkillSlider = ({ trigger, skill, companyid }: { trigger: React.ReactNo
                                 <div className="flex gap-1 ml-10 mt-1 flex-wrap">
                                     {
                                         user?.Skills?.map((sk: string) => (
-                                            <span key={sk} className={`text-xs px-3 rounded-full ${sk == skill ? 'bg-orange-200' : 'bg-slate-100'} text-slate-950`}>{skill}</span>
+                                            <span key={sk} className={`text-xs px-3 rounded-full ${sk == skill ? 'bg-orange-200' : 'bg-slate-100'} text-slate-950`}>{sk}</span>
                                         ))
                                     }
                                 </div>
