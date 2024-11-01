@@ -37,6 +37,3 @@ next-env.d.ts
 
 # uploads
 /public/uploads
-
-# file
-/app/api/

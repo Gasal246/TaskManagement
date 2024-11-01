@@ -15,7 +15,7 @@ export async function POST(req: NextRequest){
             return Response.json({pinError: "pin not fount"})
         }
         const newpin = generateOTP()
-        const updatedUser = await Users.findByIdAndUpdate(user?._id, { Password: hashedPassword, InitialEntry: false, VerifyCode: newpin });
+        const updatedUser = await Users.findByIdAndUpdate(user?._id, { Password: hashedPassword, InitialEntry: false, Status: 'active', VerifyCode: newpin });
         return Response.json(updatedUser)
     } catch (error) {
         console.log(error)
