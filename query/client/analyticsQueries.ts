@@ -2,7 +2,7 @@ import { QUERY_KEYS } from "../queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getAllProjectAnalytics } from "./fn/projectFn";
 import { getAllTaskAnalytics } from "./fn/tasksFn";
-import { getProjectCompletePendingByUserid, getProjectStatistics, getTasksAnalyticsPi } from "./fn/analyticsFn";
+import { getAdminProjectAnalytics, getAdminTasksAnalytics, getProjectCompletePendingByUserid, getProjectStatistics, getTasksAnalyticsPi } from "./fn/analyticsFn";
 
 export const useGetAllProjectAnalytics = (userid: string, filter: ProjectGetFilters) => {
     return useQuery({
@@ -38,9 +38,25 @@ export const useGetTaskAnalyticsPi = (userid: string) => {
 
 export const useGetProjectStatistics = ( userid: string ) => {
     return useQuery({
-        queryKey: [QUERY_KEYS.GET_PROJECT_STATISTICS],
+        queryKey: [QUERY_KEYS.GET_PROJECT_STATISTICS, userid],
         queryFn: async () => await getProjectStatistics(userid),
         enabled: !!userid
+    })
+}
+
+export const useGetAdminTasksAnalytics = (adminid: string ) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_ADMIN_TASK_ANALYTICS, adminid],
+        queryFn: async () => await getAdminTasksAnalytics(adminid),
+        enabled: !!adminid
+    })
+}
+
+export const useGetAdminProjectAnalytics = (adminid: string) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_ADMIN_PROJECT_ANALYTICS, adminid],
+        queryFn: async () => await getAdminProjectAnalytics(adminid),
+        enabled: !!adminid
     })
 }
 

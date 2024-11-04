@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { QUERY_KEYS } from "../queryKeys";
-import { addNewTask, deleteTask, findByMail, findUserById, getTaskComments, getTaskById, sendEmailVerificationOtp, setupNewPassword, verifyOTP, addTaskComment, removeTaskComment, getChoosableStaffs, getAllNotifications, notificationInview, resetPassword, getUserRole, getAllTasks, sendMagicLink, findHeadByUserid, getUserUnderUserid } from "./fn/userFunctions";
+import { addNewTask, deleteTask, findByMail, findUserById, getTaskComments, getTaskById, sendEmailVerificationOtp, setupNewPassword, verifyOTP, addTaskComment, removeTaskComment, getChoosableStaffs, getAllNotifications, notificationInview, resetPassword, getUserRole, getAllTasks, sendMagicLink, findHeadByUserid, getUserUnderUserid, getAllTodos, checkTodoHandler, deleteTodo, addTodo } from "./fn/userFunctions";
 
 export const useFindByMailId = () => {
     const queryClient = useQueryClient();
@@ -184,3 +184,48 @@ export const useGetStaffsUnderUserid  = (userid: string) => {
         enabled: !!userid
     })
 }
+
+export const useGetAllTodo = ( userid: string ) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_ALL_TODO],
+        queryFn: async () => getAllTodos(userid),
+        enabled: !!userid
+    })
+}
+
+export const useCheckTodo = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ todoid, check }: { todoid: string, check: 'completed' | 'pending' }) => checkTodoHandler(todoid, check),
+        onSuccess: (data: any) => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_ALL_TODO]
+            })
+        }
+    })
+}
+
+export const useDeleteTodo = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ( todoid: string ) => deleteTodo(todoid),
+        onSuccess: (data: any) => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_ALL_TODO]
+            })
+        }
+    })
+}
+
+export const useAddTodo = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ( formData: FormData ) => addTodo(formData),
+        onSuccess: (data: any) => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.GET_ALL_TODO]
+            })
+        }
+    })
+}
+

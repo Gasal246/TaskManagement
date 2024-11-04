@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
 import Image from 'next/image'
-import { Bell, CircleUser } from 'lucide-react'
+import { Bell, CircleUser, ListTodo } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { ExitIcon } from '@radix-ui/react-icons'
 import { signOut, useSession } from 'next-auth/react'
@@ -55,7 +55,8 @@ const AdminTopbar = () => {
                             </motion.div>
                         </PopoverTrigger>
                         <PopoverContent className='w-40 p-2 space-y-2'>
-                            <motion.button onClick={() => router.push(`/admin/profile/${currentUser?._id}`)} whileTap={{ scale: 0.98 }} className='w-full bg-secondary hover:bg-slate-700 rounded-sm p-1 text-sm flex gap-1 items-center justify-center'><CircleUser size={16} strokeWidth={2} /> Profile </motion.button>
+                            <motion.button onClick={() => router.push(`/admin/profile/${currentUser?._id}`)} whileTap={{ scale: 0.98 }} className='w-full bg-secondary hover:bg-slate-700 rounded-sm p-1 text-sm flex gap-1 items-center justify-center'><Avatar src={currentUser?.AvatarUrl || '/avatar.png'} size={18} /> Profile </motion.button>
+                            <motion.button onClick={() => router.push(`/admin/todo`)} whileTap={{ scale: 0.98 }} className='w-full bg-secondary hover:bg-slate-700 rounded-sm p-1 text-sm flex gap-1 items-center justify-center'><ListTodo size={16} /> Your ToDo </motion.button>
                             <AlertDialog>
                                 <AlertDialogTrigger className='w-full'><motion.h1 whileTap={{ scale: 0.98 }} className='w-full bg-destructive text-destructive-foreground hover:bg-red-700 rounded-sm p-1 text-sm flex gap-1 items-center justify-center'><ExitIcon /> Sign Out</motion.h1></AlertDialogTrigger>
                                 <AlertDialogContent>

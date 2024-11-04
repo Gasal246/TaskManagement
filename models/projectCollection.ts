@@ -1,3 +1,4 @@
+import { defaultShouldDehydrateMutation } from '@tanstack/react-query';
 import mongoose, { Schema, Document, ObjectId } from 'mongoose';
 
 export interface IProjects extends Document {
@@ -36,7 +37,7 @@ const ProjectsSchema: Schema = new Schema({
     WorkingDepartment: { type: Schema.Types.ObjectId, ref: "Departments" },
     Deadline: { type: Date },
     Priority: { type: String, enum: ['high', 'average', 'low'] },
-    IsDeleted: { type: Boolean },
+    IsDeleted: { type: Boolean, default: false },
     Region: { type: Schema.Types.ObjectId, ref: "Regions" },
     Area: { type: Schema.Types.ObjectId, ref: "Areas" },
     Documents: [{
@@ -47,7 +48,7 @@ const ProjectsSchema: Schema = new Schema({
     Flows: [{ type: Schema.Types.ObjectId, ref: "ProjectFlows" }],
     Comments: [{ type: Schema.Types.ObjectId, ref: "ProjectComments" }],
     Departments: [{ type: Schema.Types.ObjectId, ref: "Departments" }],
-    IsApproved: { type: Boolean },
+    IsApproved: { type: Boolean, default: false },
     OpenedBy: [{ type: Schema.Types.ObjectId, ref: "Users" }],
     AccessTo: [{ type: Schema.Types.ObjectId, ref: "Users" }],
     IsCompleted: { type: Boolean, default: false },

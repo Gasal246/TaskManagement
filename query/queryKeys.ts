@@ -26,6 +26,7 @@ export enum QUERY_KEYS {
     GET_ALL_SKILLS = "getAllSkills",
     GET_AVAILABLE_STAFFS = "getAllAvailableStaffs",
     GET_REGIONAL_STAFFS = "getAllRegionalStaffs",
+    GET_ALL_ADMIN_AREAS = "getAllAdminAreas",
 
     // user keys
     GET_USER_BY_ID = "getUserByUserid",
@@ -56,6 +57,8 @@ export enum QUERY_KEYS {
     GET_PROJECT_COMPLETED_PENDING_CHART = "getProjectCompletedAndPendingChart",
     GET_TASKS_ANALYTICS_PI_CHART = "getTaskAnalyticsPiChart",
     GET_PROJECT_STATISTICS = "getProjectStatisticsByUserid",
+    GET_ADMIN_TASK_ANALYTICS = "getAdminTasksAnalytics",
+    GET_ADMIN_PROJECT_ANALYTICS = "getAdminProjectAnalytics",
 
     // Client keys
     GET_ALL_CLIENTS = "getAllClientsByUserId",
@@ -64,4 +67,7 @@ export enum QUERY_KEYS {
     // Task keys
     GET_PROJECT_TASKS = "getProjectTasks",
     GET_TASK_FORWARDABLE = "getTaskForwardables",
+
+    // ToDo Keys
+    GET_ALL_TODO = "getAllToDos",
 }

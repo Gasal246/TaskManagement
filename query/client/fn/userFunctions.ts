@@ -182,3 +182,39 @@ export async function getUserUnderUserid ( userid: string ) {
     }
 }
 
+export async function getAllTodos ( userid: string ) {
+    try {
+        const res = await axios.get(`/api/todo/get-all/${userid}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function checkTodoHandler ( todoid: string, check: 'completed' | 'pending' ) {
+    try {
+        const res = await axios.post(`/api/todo/check/${todoid}`, { check });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function deleteTodo ( todoid: string ) {
+    try {
+        const res = await axios.post(`/api/todo/delete/${todoid}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function addTodo ( formData: FormData ) {
+    try {
+        const res = await axios.post(`/api/todo/add`, formData );
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+

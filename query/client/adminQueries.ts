@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from "../queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addAreaHead, addDepartmentArea, addDepartmentHead, addDepartmentRegion, addNewArea, addNewRegion, addNewSkill, addNewStaff, addRegionalHead, addStaffDocument, addStaffSkill, addStaffToDepartment, changeProfilePic, deleteArea, deleteDepartmentArea, deleteDepartmentRegion, deleteRegion, deleteSkill, deleteStaff, deleteStaffDocument, editAreaName, editProfileInfo, editRegionName, editSkills, getAllAreas, getAllDepartments, getAllRegions, getAllSkills, getAllStaffs, getAreaById, getDepartmentById, getDepartmentRegion, getOneStaff, getRegionById, getSelectableAreaHead, getSelectableRegionalHeads, getStaffsRegionAndArea, removeDepartmentStaff, removeStaffSkill, updateStaff, updateStaffStatus } from "./fn/adminFn";
+import { addAreaHead, addDepartmentArea, addDepartmentHead, addDepartmentRegion, addNewArea, addNewRegion, addNewSkill, addNewStaff, addRegionalHead, addStaffDocument, addStaffSkill, addStaffToDepartment, changeProfilePic, deleteArea, deleteDepartmentArea, deleteDepartmentRegion, deleteRegion, deleteSkill, deleteStaff, deleteStaffDocument, editAreaName, editProfileInfo, editRegionName, editSkills, getAllAdminAreas, getAllAreas, getAllDepartments, getAllRegions, getAllSkills, getAllStaffs, getAreaById, getDepartmentById, getDepartmentRegion, getOneStaff, getRegionById, getSelectableAreaHead, getSelectableRegionalHeads, getStaffsRegionAndArea, removeDepartmentStaff, removeStaffSkill, updateStaff, updateStaffStatus } from "./fn/adminFn";
 
 export const useGetAllRegions = (adminid: string) => {
     return useQuery({
@@ -35,6 +35,14 @@ export const useGetAllAreas = (regionId: string) => {
         queryKey: [QUERY_KEYS.GET_AREAS_REGIONID, regionId],
         queryFn: async () => await getAllAreas(regionId),
         enabled: !!regionId
+    })
+}
+
+export const useGetAllAdminAreas = (userid: string) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.GET_ALL_ADMIN_AREAS, userid],
+        queryFn: async () => await getAllAdminAreas(userid),
+        enabled: !!userid
     })
 }
 

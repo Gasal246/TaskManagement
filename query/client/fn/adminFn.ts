@@ -45,6 +45,15 @@ export async function getAllAreas(regionId: string){
     }
 }
 
+export async function getAllAdminAreas (userid: string) {
+    try {
+        const res = await axios.get(`/api/area/get-all/admin/${userid}`);
+        return res.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export async function editRegionName(name: string, regionId: string){
     try {
         const res = await axios.post('/api/region/edit-name', { name, regionId });
