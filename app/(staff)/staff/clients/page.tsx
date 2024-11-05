@@ -34,8 +34,8 @@ const StaffClients = () => {
               <Badge dot={!client?.OpenedBy?.includes(session?.user?.id)} className='w-full'>
                 <motion.div onClick={() => router.push(`/staff/clients/${client?._id}`)} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="bg-slate-950/60 p-3 rounded-lg hover:shadow-sm select-none cursor-pointer">
                   <div className='mb-2'>
-                    <h1 className='text-slate-200 text-sm font-medium leading-4'>{client?.Name}</h1>
-                    <h1 className='text-slate-200 text-xs font-light'>{client?.Email}</h1>
+                    <h1 className='text-slate-200 text-sm font-medium leading-4'>{client?.ShortName}</h1>
+                    <h1 className='text-slate-200 text-xs font-light'>{client?.FullName}</h1>
                   </div>
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs text-slate-400">{multiFormatDateString(client?.createdAt)}</h3>

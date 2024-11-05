@@ -8,40 +8,40 @@ import Users from "@/models/userCollection";
 connectDB();
 
 interface Body {
-    name: string;
-    email: string;
+    shortname: string;
+    fullname: string;
     details: string;
     region: string;
     area: string;
-    phone: string;
+    contactinfo: any[];
     [key: string]: any;
 }
 
-export async function POST(req: NextRequest){
+export async function POST(req: NextRequest) {
     try {
         const session: any = await getServerSession(authOptions);
         if (!session) return new NextResponse("Un Authorized Access", { status: 401 });
 
         const formData = await req.formData();
-        const body = Object.fromEntries(formData) as Body;
+        const { clientform } = Object.fromEntries(formData) as { clientform: string };
+        const body = await JSON.parse(clientform) as Body;
 
         const user = await Users.findById(session?.user?.id, { Role: 1, Addedby: 1 });
 
-        const existing = await Clients.findOne({ Email: body?.email }, { _id: 1 });
-        if(existing){
-            const updatedClient = await Clients.findByIdAndUpdate(existing?._id, { $push: { Addedby: session?.user?.id }}, { new: true });
+        const existing = await Clients.findOne({ ShortName: body?.shortname }, { _id: 1 });
+        if (existing) {
+            const updatedClient = await Clients.findByIdAndUpdate(existing?._id, { $push: { Addedby: session?.user?.id } }, { new: true });
             return Response.json(updatedClient);
         }
-
         const newClient = new Clients({
-            Name: body?.name,
-            Email: body?.email,
+            ShortName: body?.shortname,
+            FullName: body?.fullname,
             Region: body?.region,
             Area: body?.area,
             Details: body?.details,
-            Phone: body?.phone,
             AddedBy: [session?.user?.id],
-            AdminId: user?.Role == 'admin' ? session?.user?.id : user?.Addedby
+            AdminId: user?.Role == 'admin' ? session?.user?.id : user?.Addedby,
+            ContactInfo: body?.contactinfo
         })
         const savedClient = await newClient.save();
         return Response.json(savedClient);

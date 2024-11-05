@@ -14,10 +14,11 @@ import RegionAndAreaFilter from '../shared/RegionAndAreaFilter'
 import { Textarea } from '../ui/textarea'
 import { useAddClients } from '@/query/client/clientQueries'
 import { toast } from 'sonner'
+import { PlusIcon, TrashIcon } from 'lucide-react'
 
 const formSchema = z.object({
-    username: z.string().min(2),
-    email: z.string().email(),
+    shortname: z.string().min(2),
+    fullname: z.string().min(2),
     address: z.string(),
 })
 
@@ -25,38 +26,64 @@ const AddClientsDialog = ({ currentUser, trigger }: { currentUser: any, trigger?
     const [phone, setPhone] = useState<any>();
     const [region, setRegion] = useState('');
     const [area, setArea] = useState('');
+    const [contactInfo, setContactInfo] = useState<any[]>([
+        {
+            Name: '',
+            Email: '',
+            Designation: '',
+            Phone: ''
+        }
+    ])
     const { mutateAsync: addClient, isPending: addingClient } = useAddClients()
 
-    useEffect(() => {
-        console.log(region);
-        console.log(area)
-    }, [region, area])
-    
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
-            email: "",
+            shortname: "",
+            fullname: "",
             address: ""
         },
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log('Hello pressed to add this data.')
         const formData = new FormData();
-        formData.append('name', values.username);
-        formData.append('email', values.email);
-        formData.append('details', values.address);
-        formData.append('region', region);
-        formData.append('area', area);
-        formData.append('phone', phone);
+        formData.append('clientform', JSON.stringify({
+            shortname: values.shortname,
+            fullname: values.fullname,
+            details: values.address,
+            region: region,
+            area: area,
+            contactinfo: contactInfo
+        }));
         const response = await addClient(formData);
-        if(response?._id){
+        if (response?._id) {
             return toast.success("Client Added Successfully");
-        }else{
-            return toast.error("New Client Not Added", { description: "Check you filled all the details, & make sure it's unique from other client details."})
+        } else {
+            return toast.error("New Client Not Added", { description: "Check you filled all the details, & make sure it's unique from other client details." })
         }
     }
+
+    const addContactField = () => {
+        const lastContact = contactInfo[contactInfo.length - 1];
+        if (Object.values(lastContact).every((field: any) => field.trim() !== '')) {
+            setContactInfo([...contactInfo, { Name: '', Email: '', Designation: '', Phone: '' }]);
+        }
+    };
+
+    const handleContactInfoChange = (index: any, field: any, value: any) => {
+        const newContactInfo = [...contactInfo];
+        newContactInfo[index][field] = value;
+        setContactInfo(newContactInfo);
+    };
+
+    const deleteContactField = (index: any) => {
+        const newContactInfo = contactInfo.filter((_, idx) => idx !== index);
+        setContactInfo(newContactInfo);
+    };
+
+    const canAddMore = Object.values(contactInfo[contactInfo.length - 1]).every(
+        (field: any) => field.trim() !== ''
+    );
 
     return (
         <Dialog>
@@ -66,18 +93,18 @@ const AddClientsDialog = ({ currentUser, trigger }: { currentUser: any, trigger?
             <DialogContent className='max-h-[90dvh] overflow-y-scroll'>
                 <DialogHeader>
                     <DialogTitle>Add Client</DialogTitle>
-                    <DialogDescription>Add new client where projects and tasks can be wrapped under a single roof.</DialogDescription>
+                    <DialogDescription>You can add more information like contact and other after viewing the added clients.</DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
                         <FormField
                             control={form.control}
-                            name="username"
+                            name="shortname"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>Short Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Client Name" {...field} />
+                                        <Input placeholder="Client Short Name" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -85,24 +112,62 @@ const AddClientsDialog = ({ currentUser, trigger }: { currentUser: any, trigger?
                         />
                         <FormField
                             control={form.control}
-                            name="email"
+                            name="fullname"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>Full Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Client Email" {...field} />
+                                        <Input placeholder="Client Full Name" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <div>
-                            <label className='text-sm'>Phone</label>
-                            <div className='border-2 p-2 rounded-lg'>
-                                <PhoneInput placeholder="phone number with country code." value={phone} onChange={setPhone} className='bg-transparent' />
-                            </div>
-                        </div>
+                        <h1 className='mt-3 text-sm'>Select Region & Area</h1>
                         <RegionAndAreaFilter setRegion={setRegion} setArea={setArea} currentUser={currentUser} placeholder='select region' />
+                        <div className="flex flex-col gap-2">
+                            <h1>Add Contact Information</h1>
+                            {contactInfo.map((info, idx) => (
+                                <div key={idx} className="border-2 border-dashed p-2 w-full flex flex-col gap-1">
+                                    <Input
+                                        placeholder="Name"
+                                        value={info.Name}
+                                        onChange={(e) => handleContactInfoChange(idx, 'Name', e.target.value)}
+                                    />
+                                    <Input
+                                        placeholder="Designation"
+                                        value={info.Designation}
+                                        onChange={(e) => handleContactInfoChange(idx, 'Designation', e.target.value)}
+                                    />
+                                    <Input
+                                        placeholder="Email"
+                                        value={info.Email}
+                                        onChange={(e) => handleContactInfoChange(idx, 'Email', e.target.value)}
+                                    />
+                                    <Input
+                                        placeholder="Phone"
+                                        value={info.Phone}
+                                        onChange={(e) => handleContactInfoChange(idx, 'Phone', e.target.value)}
+                                    />
+                                    {idx > 0 && (
+                                        <Button
+                                            onClick={() => deleteContactField(idx)}
+                                            variant="ghost"
+                                            className="flex items-center gap-1 text-red-500"
+                                        >
+                                            <TrashIcon size={18} /> Delete
+                                        </Button>
+                                    )}
+                                </div>
+                            ))}
+                            <Button
+                                onClick={addContactField}
+                                disabled={!canAddMore}
+                                className="flex gap-2 bg-transparent border-2 border-dashed text-slate-300 hover:text-black"
+                            >
+                                <PlusIcon size={22} /> Add More
+                            </Button>
+                        </div>
                         <FormField
                             control={form.control}
                             name="address"
