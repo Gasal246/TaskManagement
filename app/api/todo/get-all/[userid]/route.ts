@@ -6,7 +6,7 @@ connectDB();
 
 export async function GET ( req: NextRequest, { params }:{ params: { userid: string } } ) {
     try {
-        const todos = await Todo.find({ UserId: params.userid });
+        const todos = await Todo.find({ UserId: params.userid }).sort({ createdAt: -1 });
         return Response.json(todos);
     } catch (error) {
         console.log(error);

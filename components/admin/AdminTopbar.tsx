@@ -30,7 +30,7 @@ const AdminTopbar = () => {
         <div className='w-full h-14 dark:bg-slate-900 bg-slate-400 px-10 flex items-center'>
             <div className="flex items-center justify-center gap-2">
                 <Image src={'/logo.png'} alt='my_logo' width={30} height={30} />
-                <h1 className='font-bold text-nowrap'>Task Manager</h1>
+                <h1 className='font-semibold text-nowrap time-font'>Task Manager</h1>
             </div>
             <div className="w-full flex justify-end">
                 <NotificationPane trigger={

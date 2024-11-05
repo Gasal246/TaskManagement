@@ -49,7 +49,7 @@ const UsersSchema: Schema = new Schema({
   },
   Phone: { type: String },
   Skills: [{ type: String,  }],
-  Addedby: { type: Schema.Types.ObjectId },
+  Addedby: { type: Schema.Types.ObjectId, ref: "Users" },
   InitialEntry: { type: Boolean, default: true },
   VerifyCode: { type: String },
   AvatarUrl: { type: String },
@@ -58,7 +58,9 @@ const UsersSchema: Schema = new Schema({
   Area: { type: Schema.Types.ObjectId, ref: "Areas" },
   Department: { type: Schema.Types.ObjectId, ref: "Departments" },
   IsDeleted: { type: Boolean, default: false },
-  Role: { type: String, enum: ['admin', 'staff', 'area-head', 'dep-head', 'region-head', 'dep-staff', 'reg-staff']}
+  Role: { type: String, enum: ['admin', 'staff', 'area-head', 'dep-head', 'region-head', 'dep-staff', 'reg-staff']},
+  Permissions: [{ type: String }],
+  Restrictions: [{ type: String }]
 }, { timestamps: true });
 
 const Users = mongoose.models?.Users || mongoose.model<IUsers>('Users', UsersSchema);

@@ -9,7 +9,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@
 import { Popconfirm, Tooltip } from 'antd'
 import { useAddTodo, useCheckTodo, useDeleteTodo, useGetAllTodo } from '@/query/client/userQueries'
 import { useSession } from 'next-auth/react'
-import { formatDateShortly, multiFormatDateString } from '@/lib/utils'
+import { formatDate, formatDateShortly, multiFormatDateString } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -46,6 +46,7 @@ const TodoPage = () => {
         }
         const response = await addtodo(formData);
         if (response?._id) {
+            setInput('')
             return toast.success("Success! New Todo Activity.")
         } else {
             return toast.error("Something went wrong on Adding ToDo!!.")
@@ -85,10 +86,10 @@ const TodoPage = () => {
                                         <motion.div whileTap={{ scale: 0.98 }} className="bg-slate-950/50 border border-dashed border-slate-800 p-2 rounded-lg hover:bg-slate-700/50 select-none cursor-pointer" onClick={() => handleCheckTodo(todo?._id, todo?.Status)}>
                                             <div className="flex gap-2 items-center">
                                                 <Checkbox checked={todo?.Status == 'completed'} />
-                                                <h1 className={`text-xs ${todo?.Status == 'completed' && 'text-slate-300 line-through'}`}>{todo?.Content}</h1>
+                                                <h1 className={`text-sm ${todo?.Status == 'completed' && 'text-slate-300 line-through'}`}>{todo?.Content}</h1>
                                             </div>
                                             <div className="flex items-center justify-end">
-                                                <h1 className='text-[12px] text-cyan-600'>{` ${formatDateShortly(todo?.createdAt)}`}</h1>
+                                                <h1 className='text-[12px] text-cyan-600'>{` ${formatDate(todo?.createdAt)}`}</h1>
                                             </div>
                                         </motion.div>
                                     </Tooltip>

@@ -15,7 +15,8 @@ import { useRouter } from 'next/navigation'
 const ProfilPage = ({ params }: { params: { id: string } }) => {
     const { data: session }: any = useSession();
     const { data: userData, isLoading: loadingUserData } = useFindUserById(params?.id);
-    const { data: headInfo, isLoading: loadingHeadInfo } = useFindHeadInfo(session?.user?.id);
+    const { data: headInfo, isLoading: loadingHeadInfo } = useFindHeadInfo(params?.id);
+
     const router = useRouter();
     return (
         <div className='w-full h-full'>
@@ -86,6 +87,18 @@ const ProfilPage = ({ params }: { params: { id: string } }) => {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div className="bg-slate-950/50 p-3 rounded-lg mb-3 mx-2">
+                            <h1 className='text-xs font-semibold'>Skills</h1>
+                            <div className="flex flex-wrap mt-2 gap-2">
+                                {
+                                    userData?.Skills?.map((skill: string) => (
+                                        <div key={skill} className="bg-slate-950/50 p-2 rounded-lg border border-slate-800">
+                                            <h1 className='text-xs font-semibold text-slate-300 capitalize'>{skill}</h1>
+                                        </div>
+                                    ))
+                                }
                             </div>
                         </div>
                     </> : <h1 className='text-center'>No User Found</h1>

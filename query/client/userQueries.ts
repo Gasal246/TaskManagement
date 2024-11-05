@@ -37,7 +37,7 @@ export const useFindUserById = (userid: string) => {
 
 export const useFindHeadInfo = ( userid: string ) => {
     return useQuery({
-        queryKey: [QUERY_KEYS.GET_HEAD_INFO],
+        queryKey: [QUERY_KEYS.GET_HEAD_INFO, userid],
         queryFn: async () => await findHeadByUserid(userid),
         enabled: !!userid
     })

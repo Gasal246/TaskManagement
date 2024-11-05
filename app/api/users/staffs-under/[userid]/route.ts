@@ -7,9 +7,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 connectDB();
 
-export async function POST(req: NextRequest, { params }: { params: { userid: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { userid: string } }) {
     try {
-        const user = await Users.findById(params.userid, { Role: 1, Area: 1 });
+        const user = await Users.findById(params.userid, { Role: 1, Area: 1, Department: 1 });
         let staffs = [];
         switch (user?.Role) {
             case "area-head": {

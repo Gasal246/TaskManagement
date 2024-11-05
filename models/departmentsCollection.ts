@@ -29,7 +29,8 @@ const DepartmentsSchema: Schema = new Schema({
   AllowTasks: { type: Boolean, required: true },
   MaximumStaffs: { type: Number, required: true },
   IsDemo: { type: Boolean },
-  IsDeleted: { type: Boolean }
+  IsDeleted: { type: Boolean },
+  HeadPermission: [{ type: String }],
 }, { timestamps: true });
 
 const Departments = mongoose?.models?.Departments || mongoose.model<IDepartments>('Departments', DepartmentsSchema);

@@ -129,7 +129,7 @@ export const columns: ColumnDef<IUsers>[] = [
                             <Tooltip title={staff?._id}>Copy Staff ID</Tooltip>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <Link href={`/admin/staffs/${staff?._id}`}><DropdownMenuItem>View staff</DropdownMenuItem></Link>
+                        <Link href={`/staff/profile/${staff?._id}`}><DropdownMenuItem>View staff</DropdownMenuItem></Link>
                         {/* <DropdownMenuItem>View payment details</DropdownMenuItem> */}
                     </DropdownMenuContent>
                 </DropdownMenu>

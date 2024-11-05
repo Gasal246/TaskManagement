@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
         if(existing){
             return Response.json({ existing: true });
         }
-        const updatedStaff = await Users.findByIdAndUpdate(staffid, { Role: 'dep-staff', Department: depId }, { new: true });
+        await Users.findByIdAndUpdate(staffid, { Role: 'dep-staff', Department: depId }, { new: true });
         await sendNotification("Role Updated to Deparment Staff", `Your current role has been updated to department staff.`, session?.user?.id, staffid, 'role-change');
         const staffId = new mongoose.Types.ObjectId(staffid);
         const updatedDep = await Departments.findByIdAndUpdate(depId, { $push: { Staffs: staffId } }, { new: true });

@@ -24,6 +24,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import RegionAndAreaFilter from '@/components/shared/RegionAndAreaFilter';
 import { useGetAllClients } from '@/query/client/clientQueries';
 import AddClientsDialog from '@/components/client/AddClientsDialog';
+import InfoTootlip from '@/components/shared/InfoTootlip';
 
 
 type SearchProps = GetProps<typeof Input.Search>;
@@ -56,9 +57,9 @@ const ProjectsPage = () => {
   }
 
   const handleFilterClient = (clientid: string) => {
-    if(selectedClients?.includes(clientid)){
+    if (selectedClients?.includes(clientid)) {
       setSelectedClients(selectedClients.filter((id) => id != clientid));
-    }else{
+    } else {
       setSelectedClients((prev) => [...prev, clientid]);
     }
   }
@@ -112,11 +113,21 @@ const ProjectsPage = () => {
 
         {!searchValue ? <Tabs defaultValue="ongoing" className="w-full">
           <TabsList className={`grid w-full ${currentUser?.Role != 'staff' ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} grid-cols-2 h-full gap-1 border border-slate-700`}>
-            {currentUser?.Role != 'staff' && <div className='px-2'><Badge count={newAnalytics?.unopenedProjects?.length} size='small' className='w-full text-slate-300'><TabsTrigger value="new" className='flex items-center gap-3 w-full border border-slate-950'>New Projects</TabsTrigger></Badge></div>}
-            <div className='px-2'><Badge size='small' count={ongoingAnalytics?.unopenedProjects?.length} className='w-full text-slate-300'><TabsTrigger value="ongoing" className='flex items-center gap-3 w-full border border-slate-950'>Ongoing Projects</TabsTrigger></Badge></div>
-            <div className='px-2'><Badge size='small' count={ownedAnalytics?.unopenedProjects?.length} className='w-full text-slate-300'><TabsTrigger value="owned" className='flex items-center gap-3 w-full border border-slate-950'>Owned Projects</TabsTrigger></Badge></div>
-            <div className='px-2'><Badge size='small' count={deletedAnalytics?.unopenedProjects?.length} className='w-full text-slate-300'><TabsTrigger value="deleted" className='flex items-center gap-3 w-full border border-slate-950'>Deleted Projects</TabsTrigger></Badge></div>
-            <div className='px-2'><Badge size='small' count={endedAnalytics?.unopenedProjects?.length} className='w-full text-slate-300'><TabsTrigger value="ended" className='flex items-center gap-3 w-full border border-slate-950'>Ended Projects</TabsTrigger></Badge></div>
+            {currentUser?.Role != 'staff' && <div className='px-2'><Badge count={newAnalytics?.unopenedProjects?.length} size='small' className='w-full text-slate-300'><TabsTrigger value="new" className='flex items-center gap-3 w-full border border-slate-950'>
+              <span className='flex gap-1 items-center'>New Projects <InfoTootlip text="This area will show you latest projects which you haven't viewed yet." /></span>
+            </TabsTrigger></Badge></div>}
+            <div className='px-2'><Badge size='small' count={ongoingAnalytics?.unopenedProjects?.length} className='w-full text-slate-300'><TabsTrigger value="ongoing" className='flex items-center gap-3 w-full border border-slate-950'>
+              <span className='flex gap-1 items-center'>Ongoing Projects <InfoTootlip text="This shows the projects that are approved and readily working." /></span>
+            </TabsTrigger></Badge></div>
+            <div className='px-2'><Badge size='small' count={ownedAnalytics?.unopenedProjects?.length} className='w-full text-slate-300'><TabsTrigger value="owned" className='flex items-center gap-3 w-full border border-slate-950'>
+              <span className='flex gap-1 items-center'>Owned Projects <InfoTootlip text="This area shows the projects created by you. [ means you own them ]" /></span>
+            </TabsTrigger></Badge></div>
+            <div className='px-2'><Badge size='small' count={deletedAnalytics?.unopenedProjects?.length} className='w-full text-slate-300'><TabsTrigger value="deleted" className='flex items-center gap-3 w-full border border-slate-950'>
+              <span className='flex gap-1 items-center'>Deleted Projects <InfoTootlip text="Projects deleted by admin or creator is showcased here for couple of days before completely deleted." /></span>
+            </TabsTrigger></Badge></div>
+            <div className='px-2'><Badge size='small' count={endedAnalytics?.unopenedProjects?.length} className='w-full text-slate-300'><TabsTrigger value="ended" className='flex items-center gap-3 w-full border border-slate-950'>
+              <span className='flex gap-1 items-center'>Ended Projects <InfoTootlip text="This area shows All the completed projects under your sector." /></span>
+            </TabsTrigger></Badge></div>
           </TabsList>
           {currentUser?.Role == 'admin' && <TabsContent value="new">
             <ProjectCards filter='new' selectedClients={selectedClients} />
