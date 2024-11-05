@@ -52,8 +52,8 @@ const StaffClientId = ({ params }: { params: { clientid: string } }) => {
             </Breadcrumb>
             <div className="mt-3 bg-slate-950/50 rounded-lg p-3 flex justify-between flex-wrap items-center mb-1">
                 <div>
-                    <h1 className='leading-5 text-slate-200'>{clientData?.Name}</h1>
-                    <h4 className='text-xs text-slate-300'>{clientData?.Email}</h4>
+                    <h1 className='leading-5 text-slate-200'>{clientData?.ShortName}</h1>
+                    <h4 className='text-sm text-slate-300 mt-1'>{clientData?.FullName}</h4>
                 </div>
                 <div className="p-1 flex gap-1 items-center">
                     {clientData ? <UpdateClientDialog clientData={clientData} currentUser={currentUser} /> : <Skeleton className='w-[130px] rounded-lg h-[30px]' />}
@@ -65,12 +65,13 @@ const StaffClientId = ({ params }: { params: { clientid: string } }) => {
             <div className="flex flex-wrap">
                 <div className="w-full lg:w-1/2 p-1">
                     <div className="bg-slate-950/50 rounded-lg p-2 text-xs text-cyan-500 font-medium">
-                        Phone: <pre className='text-slate-300 font-light text-sm'>{clientData?.Phone}</pre>
+                        Region/Area: <pre className='text-slate-300 font-light text-sm'>{clientData?.Region?.RegionName}/{clientData?.Area?.Areaname}</pre>
                     </div>
                 </div>
                 <div className="w-full lg:w-1/2 p-1">
                     <div className="bg-slate-950/50 rounded-lg p-2 text-xs text-cyan-500 font-medium">
-                        Region/Area: <pre className='text-slate-300 font-light text-sm'>{clientData?.Region?.RegionName}/{clientData?.Area?.Areaname}</pre>
+                        Created: <span className="text-slate-300 font-light text-xs text-wrap"> {formatDateTiny(clientData?.createdAt)}</span> <br />
+                        Updated: <span className="text-slate-300 font-light text-xs text-wrap"> {formatDateTiny(clientData?.updatedAt)}</span>
                     </div>
                 </div>
                 <div className="w-full lg:w-1/2 p-1">
@@ -79,11 +80,20 @@ const StaffClientId = ({ params }: { params: { clientid: string } }) => {
                         <pre className="text-slate-300 font-light text-sm text-wrap">{clientData?.Details}</pre>
                     </div>
                 </div>
-                <div className="w-full lg:w-1/2 p-1">
-                    <div className="bg-slate-950/50 rounded-lg p-2 text-xs text-cyan-500 font-medium">
-                        Created: <span className="text-slate-300 font-light text-xs text-wrap"> {formatDateTiny(clientData?.createdAt)}</span> <br />
-                        Updated: <span className="text-slate-300 font-light text-xs text-wrap"> {formatDateTiny(clientData?.updatedAt)}</span>
-                    </div>
+            </div>
+            <div className="bg-slate-950/50 p-3 rounded-lg m-1 mb-2">
+                <h1 className='text-sm font-medium text-cyan-500'>Contact Cards</h1>
+                <div className="w-full flex flex-wrap">
+                    {clientData?.ContactInfo?.map((contact: any) => (
+                        <div key={contact?._id} className="w-full lg:w-3/12 p-1">
+                            <div className='bg-slate-950/50 rounded-lg p-2 border border-dashed border-slate-700'>
+                                <h1 className='text-cyan-500 text-xs font-medium flex gap-1'>Name: <span className='text-slate-300 font-normal'>{contact?.Name}</span></h1>
+                                <h1 className='text-cyan-500 text-xs font-medium flex gap-1'>Designation: <span className='text-slate-300 font-normal'>{contact?.Designation}</span></h1>
+                                <h1 className='text-cyan-500 text-xs font-medium flex gap-1'>Email: <span className='text-slate-300 font-normal'>{contact?.Email}</span></h1>
+                                <h1 className='text-cyan-500 text-xs font-medium flex gap-1'>Phone: <span className='text-slate-300 font-normal'>{contact?.Phone}</span></h1>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
             <div className="bg-slate-950/50 rounded-lg p-3 m-1">
