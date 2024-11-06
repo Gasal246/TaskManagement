@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
 import RegionAndAreaFilter from '../shared/RegionAndAreaFilter'
 import { Textarea } from '../ui/textarea'
 import { useAddClients } from '@/query/client/clientQueries'
@@ -23,7 +22,6 @@ const formSchema = z.object({
 })
 
 const AddClientsDialog = ({ currentUser, trigger }: { currentUser: any, trigger?: React.ReactNode }) => {
-    const [phone, setPhone] = useState<any>();
     const [region, setRegion] = useState('');
     const [area, setArea] = useState('');
     const [contactInfo, setContactInfo] = useState<any[]>([

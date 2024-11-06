@@ -7,7 +7,7 @@ import { Button } from '../ui/button';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import PhoneInput from 'react-phone-number-input'
 import { Textarea } from '../ui/textarea';
@@ -18,25 +18,24 @@ import { useUpdateClient } from '@/query/client/clientQueries';
 import { toast } from 'sonner';
 
 const formSchema = z.object({
-    name: z.string().min(2),
-    email: z.string().email(),
+    shortname: z.string().min(2),
+    fullname: z.string().min(2),
     address: z.string(),
     region: z.string(),
-    area: z.string()
+    area: z.string(),
 })
 
 const UpdateClientDialog = ({ clientData, currentUser }: { clientData: any, currentUser: any }) => {
-    const [phone, setPhone] = useState<any>(clientData?.Phone)
     const [selectedRegion, setSelectedRegion] = useState(clientData?.Region?._id)
-    const { data: adminRegions, isLoading: loadingRegions } = useGetAllRegions(currentUser?._id);
+    const { data: adminRegions, isLoading: loadingRegions } = useGetAllRegions(currentUser?.Addedby);
     const { data: areas, isLoading: loadingAreas, refetch: refechAreas } = useGetAllAreas(selectedRegion);
     const { mutateAsync: updateClient, isPending: updatingClient } = useUpdateClient();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: clientData?.Name,
-            email: clientData?.Email,
+            shortname: clientData?.ShortName,
+            fullname: clientData?.FullName,
             address: clientData?.Details,
             region: clientData?.Region?._id,
             area: clientData?.Area?._id
@@ -52,13 +51,15 @@ const UpdateClientDialog = ({ clientData, currentUser }: { clientData: any, curr
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const formData = new FormData();
-        formData.append('clientId', clientData?._id)
-        formData.append('name', values.name);
-        formData.append('email', values.email);
-        formData.append('details', values.address);
-        formData.append('region', values.region);
-        formData.append('area', values.area);
-        formData.append('phone', phone);
+        formData.append('clientUpdateForm', JSON.stringify({
+            clientId: clientData?._id,
+            shortname: values.shortname,
+            fullname: values.fullname,
+            details: values.address,
+            region: values.region,
+            area: values.area
+        }))
+
         try {
             const response = await updateClient(formData);
             if(response._id){
@@ -79,18 +80,18 @@ const UpdateClientDialog = ({ clientData, currentUser }: { clientData: any, curr
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Update Client</DialogTitle>
-                    <DialogDescription>This will update this client details until your next update.</DialogDescription>
+                    <DialogDescription>Once you updated you could only see updated version of client even in previous projects.</DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="shortname"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Client Name</FormLabel>
+                                    <FormLabel>Short Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Client Name" {...field} />
+                                        <Input placeholder="Client Short Name" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -98,23 +99,17 @@ const UpdateClientDialog = ({ clientData, currentUser }: { clientData: any, curr
                         />
                         <FormField
                             control={form.control}
-                            name="email"
+                            name="fullname"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Client Email</FormLabel>
+                                    <FormLabel>Short Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Client Email" {...field} />
+                                        <Input placeholder="Client Short Name" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <div>
-                            <label className='text-sm'>Phone</label>
-                            <div className='border-2 p-2 rounded-lg'>
-                                <PhoneInput placeholder="Enter phone number" value={phone} onChange={setPhone} className='bg-transparent' />
-                            </div>
-                        </div>
                         {(loadingRegions || loadingAreas) && <Skeleton className='w-[180px] h-[35px] rounded-lg' />}
                         {adminRegions?.length > 0 && <FormField
                             control={form.control}

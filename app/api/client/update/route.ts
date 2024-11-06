@@ -8,12 +8,11 @@ connectDB();
 
 interface Body {
     clientId: string;
-    name: string;
-    email: string;
+    shortname: string;
+    fullname: string;
     details: string;
     region: string;
     area: string;
-    phone: string;
     [key: string]: any;
 }
 
@@ -23,10 +22,11 @@ export async function POST(req: NextRequest) {
         if (!session) return new NextResponse("Un Authorized Access", { status: 401 });
 
         const formData = await req.formData();
-        const body = Object.fromEntries(formData) as Body;
+        const { clientUpdateForm } = Object.fromEntries(formData) as { clientUpdateForm: string };
+        const body = await JSON.parse(clientUpdateForm) as Body;
 
-        const client = await Clients.findById(body?.clientId, { Email: 1, AdminId: 1 });
-        const someClient = await Clients.findOne({ Email: body?.email, AdminId: client?.AdminId }, { AdminId: 1 });
+        const client = await Clients.findById(body?.clientId, { ShortName: 1, AdminId: 1 });
+        const someClient = await Clients.findOne({ ShortName: body?.shortname, AdminId: client?.AdminId }, { AdminId: 1 });
 
         console.log(client, someClient);
 
@@ -35,12 +35,11 @@ export async function POST(req: NextRequest) {
         }
 
         const updatedClient = await Clients.findByIdAndUpdate(body?.clientId, {
-            Name: body?.name,
-            Email: body?.email,
-            Region: body?.region,
-            Area: body?.area,
+            ShortName: body.shortname,
+            FullName: body?.fullname,
             Details: body?.details,
-            Phone: body?.phone
+            Region: body?.region,
+            Area: body?.area
         }, { new: true });
         return Response.json(updatedClient);
     } catch (error) {

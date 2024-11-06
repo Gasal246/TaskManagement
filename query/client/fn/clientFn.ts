@@ -54,3 +54,30 @@ export async function clientOnView( clientId: string ) {
     }
 }
 
+export async function contactCardUpdate (formData: FormData) {
+    try {
+        const res = await axios.post(`/api/client/contact-card/update`, formData);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function contactCardAdd ( formData: FormData ) {
+    try {
+        const res = await axios.post(`/api/client/contact-card/add`, formData);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function contactCardDelete ( clientId: string, cardId: string ) {
+    try {
+        const res = await axios.post(`/api/client/contact-card/delete`, { clientId, cardId });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
